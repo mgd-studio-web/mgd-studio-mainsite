@@ -49,7 +49,7 @@
             "name": "Quanto tempo serve per avere il sito online?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "In genere tra i 7 e i 10 giorni lavorativi dalla conferma della bozza e proposta gratuita e dalla consegna dei materiali base (foto, orari e listino)."
+              "text": "In genere tra i 5 e i 10 giorni lavorativi (5–7 giorni per il Pacchetto Vetrina) dalla conferma della bozza e proposta gratuita e dalla consegna dei materiali base (foto, orari e listino)."
             }
           },
           {
@@ -65,7 +65,7 @@
             "name": "Ci sono costi nascosti ogni mese?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Nessun costo a sorpresa. Il prezzo del pacchetto è trasparente e nel Pacchetto Completo sono inclusi supporto post-pubblicazione e aggiornamenti concordati. Eventuali rinnovi di dominio, hosting o interventi successivi vengono sempre concordati prima."
+              "text": "Nessun costo a sorpresa e nessun abbonamento obbligatorio: il prezzo del pacchetto (Vetrina 299€, Plus 449€ o Su Misura da 690€) è una tantum e il sito resta tuo. Per eventuali modifiche future puoi richiedere interventi singoli (25€–35€) oppure attivare il piano opzionale Pensiero Zero a 15€/mese (o 150€/anno), che include dominio .it, hosting veloce e fino a 2 aggiornamenti al mese."
             }
           }
         ]
@@ -246,7 +246,7 @@
       font-size: 0.68rem; font-weight: 800;
     }
 
-    /* SHOWCASE INTERATTIVO CON FOTO VERE */
+    /* SHOWCASE INTERATTIVO DAL VIVO (IFRAME DEMO) */
     .showcase-panel {
       background: #0a0f1d;
       border: 2px solid #1e293b;
@@ -256,6 +256,7 @@
     }
     .showcase-tabs {
       display: flex;
+      align-items: center;
       background: #0f172a;
       border-bottom: 1px solid #1e293b;
       padding: 10px 12px;
@@ -275,116 +276,237 @@
       transition: all var(--transition-fast);
     }
     .showcase-tab:hover { color: #ffffff; background: rgba(255, 255, 255, 0.1); }
+    .showcase-tab:focus-visible { outline: 2px solid #60a5fa; outline-offset: 2px; }
     .showcase-tab.is-active {
       background: var(--accent-blue);
       color: #ffffff;
       border-color: var(--accent-blue);
       box-shadow: 0 4px 14px rgba(0, 82, 255, 0.45);
     }
+    .showcase-caption {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      background: rgba(15, 23, 42, 0.96);
+      border-bottom: 1px solid #1e293b;
+      font-size: 0.73rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      line-height: 1.38;
+    }
+    .showcase-caption__dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.22);
+      flex-shrink: 0;
+    }
     .showcase-browser-bar {
       display: flex; align-items: center; justify-content: space-between;
       padding: 9px 14px; border-bottom: 1px solid #1e293b; gap: 8px;
       background: #1e293b;
     }
-    .browser-dots { display: flex; gap: 5px; }
+    .browser-dots { display: flex; gap: 5px; flex-shrink: 0; }
     .browser-dot { width: 9px; height: 9px; border-radius: 50%; background: #475569; }
     .browser-dot--red { background: #ef4444; }
     .browser-dot--yellow { background: #f59e0b; }
     .browser-dot--green { background: #22c55e; }
     .browser-url {
-      flex: 1; max-width: 230px;
+      flex: 1; min-width: 0;
       background: #0f172a; border: 1px solid #334155;
       border-radius: 6px; padding: 4px 10px;
-      font-size: 0.72rem; font-family: var(--font-mono); color: #e2e8f0;
-      text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      font-size: 0.71rem; font-family: var(--font-mono); color: #e2e8f0;
+      text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .showcase-bar-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
     }
     .showcase-device-toggle { display: inline-flex; background: #0f172a; border: 1px solid #334155; border-radius: 7px; padding: 2px; }
-    .device-btn { padding: 4px 10px; font-size: 0.71rem; font-weight: 700; border: none; background: transparent; color: #94a3b8; border-radius: 5px; cursor: pointer; transition: all var(--transition-fast); }
+    .device-btn { padding: 4px 9px; font-size: 0.71rem; font-weight: 700; border: none; background: transparent; color: #94a3b8; border-radius: 5px; cursor: pointer; white-space: nowrap; transition: all var(--transition-fast); }
+    .device-btn:hover { color: #e2e8f0; }
+    .device-btn:focus-visible { outline: 2px solid #60a5fa; outline-offset: 1px; }
     .device-btn.is-active { background: var(--accent-blue); color: #ffffff; }
+    .showcase-open-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 10px;
+      font-size: 0.71rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 7px;
+      white-space: nowrap;
+      line-height: 1.2;
+      transition: all var(--transition-fast);
+    }
+    .showcase-open-btn:hover {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      color: #ffffff;
+    }
+    .showcase-open-btn:focus-visible {
+      outline: 2px solid #60a5fa;
+      outline-offset: 2px;
+    }
     .showcase-viewport {
       padding: 16px;
       background: radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 100%);
-      min-height: 345px;
+      min-height: 360px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
     .showcase-mockup {
       width: 100%;
-      background: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: #0a0f1d;
+      border: 1px solid rgba(255, 255, 255, 0.14);
       border-radius: 14px;
       overflow: hidden;
       margin: 0 auto;
       box-shadow: 0 16px 36px -5px rgba(0, 0, 0, 0.45);
-      transition: all var(--transition-smooth);
+      transition: max-width var(--transition-smooth), border-radius var(--transition-smooth);
     }
     .showcase-mockup.is-mobile {
-      max-width: 285px;
+      max-width: 316px;
       border: 5px solid #334155;
-      border-radius: 26px;
+      border-radius: 28px;
+      background: #0f172a;
+    }
+    .mockup-phone-bezel {
+      display: none;
+      height: 18px;
+      background: #0f172a;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .showcase-mockup.is-mobile .mockup-phone-bezel {
+      display: flex;
     }
     .mockup-notch {
-      display: none;
-      width: 72px; height: 14px;
-      background: #0a0f1d;
-      border-radius: 0 0 10px 10px;
-      margin: 0 auto;
+      width: 74px;
+      height: 11px;
+      background: #020617;
+      border-radius: 0 0 9px 9px;
     }
-    .showcase-mockup.is-mobile .mockup-notch { display: block; }
-    .mockup-nav {
-      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;
-      padding: 10px 14px; background: #fff; border-bottom: 1px solid var(--border-subtle);
-    }
-    .mockup-brand { font-size: 0.82rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text-primary); }
-    .mockup-badge { font-size: 0.65rem; font-weight: 700; color: var(--accent-blue); background: var(--accent-blue-soft); padding: 3px 8px; border-radius: 999px; }
-    .mockup-visual-hero {
+    .showcase-iframe-stage {
       position: relative;
-      min-height: 165px;
-      background-size: cover;
-      background-position: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 14px;
-      color: #ffffff;
+      width: 100%;
+      height: var(--showcase-stage-h, 375px);
+      overflow: hidden;
+      isolation: isolate;
+      clip-path: inset(0);
+      background: #0b1120;
     }
-    .mockup-visual-hero::before {
-      content: '';
+    .showcase-mockup.is-mobile .showcase-iframe-stage {
+      height: 490px;
+    }
+    .showcase-iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1280px;
+      height: var(--showcase-iframe-h, 850px);
+      border: 0;
+      background: #0b1120;
+      transform: scale(var(--showcase-scale, 0.45));
+      transform-origin: top left;
+      pointer-events: none;
+      display: block;
+    }
+    .showcase-mockup.is-interactive .showcase-iframe {
+      pointer-events: auto;
+    }
+    .showcase-mockup.is-mobile .showcase-iframe {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform: none;
+    }
+    .showcase-loader {
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(10, 15, 29, 0.2) 0%, rgba(10, 15, 29, 0.88) 100%);
-    }
-    .mockup-visual-content { position: relative; z-index: 1; }
-    .mockup-status-pill {
-      display: inline-flex; align-items: center; gap: 5px;
-      background: rgba(10, 15, 29, 0.65); backdrop-filter: blur(6px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #fff; font-size: 0.63rem; font-weight: 700;
-      padding: 3px 9px; border-radius: 999px; margin-bottom: 6px;
-    }
-    .mockup-status-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; }
-    .mockup-headline { font-family: var(--font-display); font-size: 1.04rem; font-weight: 800; line-height: 1.2; margin-bottom: 3px; color: #fff; }
-    .mockup-subline { font-size: 0.73rem; color: rgba(255, 255, 255, 0.9); margin-bottom: 10px; line-height: 1.35; }
-    .mockup-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-    .mockup-btn-primary { background: var(--accent-blue); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 6px 12px; border-radius: 6px; box-shadow: 0 4px 10px rgba(0, 82, 255, 0.4); }
-    .mockup-btn-secondary { background: rgba(255, 255, 255, 0.95); color: var(--text-primary); font-size: 0.7rem; font-weight: 700; padding: 6px 12px; border-radius: 6px; }
-    .mockup-body { padding: 12px 14px; background: #fff; }
-    .mockup-cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .showcase-mockup.is-mobile .mockup-cards-grid { grid-template-columns: 1fr; }
-    .mockup-mini-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-subtle);
-      border-radius: 8px;
-      padding: 8px 10px;
+      z-index: 1;
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: #0b1120;
+      color: #cbd5e1;
+      font-size: 0.78rem;
+      font-weight: 600;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.22s ease;
     }
-    .mockup-mini-card__top { display: flex; align-items: center; justify-content: space-between; gap: 4px; }
-    .mockup-mini-card__title { font-size: 0.71rem; font-weight: 700; color: var(--text-primary); }
-    .mockup-mini-card__tag { font-size: 0.64rem; font-weight: 800; color: var(--accent-blue); background: var(--accent-blue-soft); padding: 1px 6px; border-radius: 4px; }
-    .mockup-mini-card__desc { font-size: 0.65rem; color: var(--text-muted); }
+    .showcase-mockup.is-loading .showcase-loader {
+      opacity: 1;
+    }
+    .showcase-loader__spinner {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2.5px solid rgba(148, 163, 184, 0.25);
+      border-top-color: #3b82f6;
+      animation: showcaseSpin 0.75s linear infinite;
+    }
+    @keyframes showcaseSpin {
+      to { transform: rotate(360deg); }
+    }
+    .showcase-interact-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      padding: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      background: linear-gradient(180deg, rgba(10, 15, 29, 0) 58%, rgba(10, 15, 29, 0.46) 100%);
+      transition: opacity 0.2s ease, background 0.2s ease;
+    }
+    .showcase-interact-overlay:hover {
+      background: linear-gradient(180deg, rgba(10, 15, 29, 0.04) 48%, rgba(10, 15, 29, 0.56) 100%);
+    }
+    .showcase-interact-overlay:focus-visible {
+      outline: 2px solid #60a5fa;
+      outline-offset: -3px;
+    }
+    .showcase-interact-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 15px;
+      border-radius: 999px;
+      background: rgba(10, 15, 29, 0.88);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(96, 165, 250, 0.45);
+      color: #ffffff;
+      font-size: 0.76rem;
+      font-weight: 700;
+      box-shadow: 0 10px 26px -6px rgba(0, 0, 0, 0.65);
+      transition: transform var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+    }
+    .showcase-interact-overlay:hover .showcase-interact-pill {
+      transform: translateY(-2px);
+      background: rgba(0, 82, 255, 0.92);
+      border-color: rgba(147, 197, 253, 0.75);
+    }
+    .showcase-mockup.is-interactive .showcase-interact-overlay {
+      opacity: 0;
+      pointer-events: none;
+    }
 
     /* STRISCIA 3 PASSI */
     .steps-strip {
@@ -527,79 +649,49 @@
       color: var(--accent-blue);
     }
 
-    /* BANNER DEMO DAL VIVO (PIZZERIA FORNO 89) */
-    .live-demo-banner {
+    /* STRISCIA 3 GARANZIE CONCRETE (SOPRA IL CONFIGURATORE) */
+    .guarantees-strip {
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border-top: 1px solid var(--border-subtle);
+      padding: 26px 0;
+    }
+    .guarantees-strip__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
       max-width: 1040px;
-      margin: 28px auto 0;
-      background: linear-gradient(135deg, #0a0f1d 0%, #101b36 58%, #0d204a 100%);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      border-radius: 20px;
-      padding: 24px 28px;
-      color: #f8fafc;
-      box-shadow: 0 22px 46px -18px rgba(10, 15, 29, 0.38);
+      margin: 0 auto;
+    }
+    .guarantee-card {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 22px;
-    }
-    .live-demo-banner__info {
+      gap: 12px;
+      padding: 14px 18px;
+      background: #ffffff;
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 16px;
+      box-shadow: var(--shadow-xs);
       min-width: 0;
-      flex: 1;
     }
-    .live-demo-banner__eyebrow {
+    .guarantee-card__icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--accent-blue-soft);
+      border: 1px solid var(--accent-blue-subtle);
+      color: var(--accent-blue);
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      font-size: 0.72rem;
+      justify-content: center;
+      font-size: 0.9rem;
       font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #93c5fd;
-      background: rgba(59, 130, 246, 0.16);
-      border: 1px solid rgba(96, 165, 250, 0.3);
-      padding: 4px 11px;
-      border-radius: 999px;
-      margin-bottom: 10px;
-    }
-    .live-demo-banner__dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #22c55e;
-      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
       flex-shrink: 0;
     }
-    .live-demo-banner__title {
-      font-family: var(--font-display);
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: #ffffff;
-      letter-spacing: -0.02em;
-      margin-bottom: 5px;
-      line-height: 1.25;
-    }
-    .live-demo-banner__desc {
-      font-size: 0.88rem;
-      color: #cbd5e1;
-      line-height: 1.5;
-      max-width: 540px;
-    }
-    .live-demo-banner__actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      flex-shrink: 0;
-    }
-    .btn--demo-outline {
-      background: rgba(255, 255, 255, 0.08);
-      color: #ffffff;
-      border: 1.5px solid rgba(148, 163, 184, 0.34);
-    }
-    .btn--demo-outline:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: #60a5fa;
-      transform: translateY(-2px);
+    .guarantee-card__text {
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.35;
     }
 
     /* 3. CONFIGURATORE CONVERSAZIONALE GUIDATO A 2 COLONNE */
@@ -1078,13 +1170,33 @@
       gap: 10px;
     }
     .stage-footer .btn { border-radius: 14px; min-height: 45px; }
+    .wizard-wa-shortcut {
+      display: none;
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-top: 12px;
+      line-height: 1.45;
+    }
+    .wizard-wa-shortcut.is-visible { display: block; }
+    .wizard-wa-shortcut__link {
+      color: #15803d;
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      margin-left: 4px;
+      transition: color var(--transition-fast);
+    }
+    .wizard-wa-shortcut__link:hover { color: #166534; }
+    .wizard-wa-shortcut__link:focus-visible { outline: 2px solid #25d366; outline-offset: 2px; border-radius: 4px; }
     .wizard-reassurance {
       display: none;
       text-align: center;
       font-size: 0.77rem;
       font-weight: 600;
       color: var(--text-muted);
-      margin-top: 11px;
+      margin-top: 9px;
       line-height: 1.45;
     }
     .wizard-reassurance.is-visible { display: block; }
@@ -1584,7 +1696,7 @@
       .choice-cards-grid--packages { grid-template-columns: 1fr; }
     }
     @media (max-width: 900px) {
-      .hero__grid, .pricing-grid, .steps-strip__grid, .team-grid, .reviews-grid { grid-template-columns: 1fr; }
+      .hero__grid, .pricing-grid, .steps-strip__grid, .guarantees-strip__grid, .team-grid, .reviews-grid { grid-template-columns: 1fr; }
       .pricing-card--featured { transform: none; }
       .pricing-card--featured:hover { transform: translateY(-5px); }
       .nav-links, .nav-actions .btn { display: none; }
@@ -1608,22 +1720,17 @@
       .confirmation-actions .btn { width: 100%; }
       .consultation-box { flex-direction: column; align-items: stretch; text-align: center; padding: 18px; }
       .consultation-box .btn { width: 100%; }
-      .live-demo-banner { flex-direction: column; align-items: stretch; padding: 22px 20px; gap: 16px; }
-      .live-demo-banner__actions { flex-direction: column; align-items: stretch; }
-      .live-demo-banner__actions .btn { width: 100%; white-space: normal; text-align: center; }
       .faq-trigger { padding: 18px 16px; min-height: 56px; font-size: 0.96rem; gap: 12px; }
       .faq-answer { padding: 0 16px 18px; font-size: 0.9rem; }
       .whatsapp-float { padding: 10px 15px; font-size: 0.85rem; }
     }
     @media (max-width: 560px) {
-      .showcase-browser-bar { flex-wrap: wrap; gap: 6px; padding: 9px 12px; }
+      .showcase-browser-bar { flex-wrap: wrap; gap: 6px; padding: 9px 10px; }
       .browser-url { order: 3; flex: 1 1 100%; max-width: none; }
-      .mockup-cards-grid { grid-template-columns: 1fr; }
+      .showcase-viewport { padding: 10px; min-height: 240px; }
+      .showcase-mockup.is-mobile .showcase-iframe-stage { height: 430px; }
       .pricing-card { padding: 24px 18px; }
       .pricing-card .btn { padding: 12px 16px; }
-      .live-demo-banner { padding: 18px 15px; border-radius: 18px; }
-      .live-demo-banner__title { font-size: 1.06rem; }
-      .live-demo-banner__desc { font-size: 0.84rem; }
       .chat-header { padding: 15px 14px 13px; }
       .chat-messages { padding: 14px; max-height: 240px; }
       .chat-msg { max-width: 94%; }
@@ -1643,6 +1750,16 @@
       .modal-content { padding: 16px; font-size: 0.84rem; }
     }
     @media (max-width: 420px) {
+      .showcase-tabs { padding: 8px 8px; gap: 5px; }
+      .showcase-tab { padding: 6px 8px; font-size: 0.67rem; }
+      .showcase-caption { padding: 6px 10px; font-size: 0.69rem; }
+      .guarantee-card { padding: 12px 14px; }
+      .guarantee-card__text { font-size: 0.82rem; }
+      .browser-dots { display: none; }
+      .showcase-bar-actions { width: 100%; justify-content: space-between; }
+      .device-btn { padding: 4px 7px; font-size: 0.68rem; }
+      .showcase-open-btn { padding: 5px 8px; font-size: 0.68rem; }
+      .showcase-interact-pill { font-size: 0.7rem; padding: 7px 12px; }
       .custom-section-btn__label { display: none; }
     }
   </style>
@@ -1651,7 +1768,7 @@
   <header class="site-header">
     <div class="container navbar">
       <a href="#home" class="brand-logo" aria-label="MGD Studio">
-        <img src="data:image/webp;base64,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" alt="Logo MGD Studio" class="brand-logo__img" />
+        <img src="./logo.webp" width="280" height="72" alt="Logo MGD Studio" class="brand-logo__img" />
       </a>
       <nav aria-label="Navigazione principale">
         <ul class="nav-links">
@@ -1705,68 +1822,62 @@
         </div>
 
         <div class="showcase-panel reveal is-visible">
-          <div class="showcase-tabs">
-            <button type="button" class="showcase-tab is-active" data-showcase-tab="ristorante">🍸 Ristoranti &amp; Bar</button>
-            <button type="button" class="showcase-tab" data-showcase-tab="parrucchiere">✂️ Parrucchieri &amp; Saloni</button>
-            <button type="button" class="showcase-tab" data-showcase-tab="negozio">🏢 Negozi &amp; Aziende</button>
+          <div class="showcase-tabs" role="tablist" aria-label="Demo interattive dal vivo">
+            <button type="button" class="showcase-tab is-active" role="tab" aria-selected="true" data-showcase-tab="forno89">🍕 Pizzeria Forno 89</button>
+            <button type="button" class="showcase-tab" role="tab" aria-selected="false" data-showcase-tab="admin">🖥️ Area Host (Admin)</button>
+          </div>
+          <div class="showcase-caption">
+            <span class="showcase-caption__dot" aria-hidden="true"></span>
+            <span>Demo reale funzionante: naviga il sito o testa la gestione prenotazioni nell’Area Host.</span>
           </div>
           <div class="showcase-browser-bar">
-            <div class="browser-dots">
+            <div class="browser-dots" aria-hidden="true">
               <span class="browser-dot browser-dot--red"></span>
               <span class="browser-dot browser-dot--yellow"></span>
               <span class="browser-dot browser-dot--green"></span>
             </div>
-            <div class="browser-url" id="showcase-domain-url">🔒 https://loungebistrot.it</div>
-            <div class="showcase-device-toggle">
-              <button type="button" class="device-btn is-active" data-device-mode="desktop">💻 PC</button>
-              <button type="button" class="device-btn" data-device-mode="mobile">📱 Telefono</button>
+            <div class="browser-url" id="showcase-domain-url" title="https://mgd-studio-web.github.io/pizzeria-forno89PROVA/">🔒 https://mgd-studio-web.github.io/pizzeria-forno89PROVA/</div>
+            <div class="showcase-bar-actions">
+              <div class="showcase-device-toggle" role="group" aria-label="Modalità di visualizzazione">
+                <button type="button" class="device-btn is-active" data-device-mode="desktop" aria-pressed="true">💻 PC</button>
+                <button type="button" class="device-btn" data-device-mode="mobile" aria-pressed="false">📱 Telefono</button>
+              </div>
+              <a
+                href="https://mgd-studio-web.github.io/pizzeria-forno89PROVA/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="showcase-open-btn"
+                id="showcase-open-btn"
+                aria-label="Apri Pizzeria Forno 89 a schermo intero in una nuova scheda"
+              >↗ Apri</a>
             </div>
           </div>
           <div class="showcase-viewport">
-            <div class="showcase-mockup" id="showcase-mockup-frame">
-              <div class="mockup-notch"></div>
-              <div class="mockup-nav">
-                <span class="mockup-brand">Lounge &amp; Bistrot Milano</span>
-                <span class="mockup-badge">Ristorante / Cocktail Bar</span>
+            <div class="showcase-mockup is-loading" id="showcase-mockup-frame">
+              <div class="mockup-phone-bezel" aria-hidden="true">
+                <div class="mockup-notch"></div>
               </div>
-              <div class="mockup-visual-hero" style="background-image:url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&amp;fit=crop&amp;w=900&amp;q=80');">
-                <div class="mockup-visual-content">
-                  <div class="mockup-status-pill">
-                    <span class="mockup-status-dot"></span>
-                    <span>Aperto oggi · 18:00 - 02:00</span>
-                  </div>
-                  <p class="mockup-headline">Sapori autentici &amp; Cocktail d’autore.</p>
-                  <p class="mockup-subline">Scopri il menu digitale da smartphone e prenota il tuo tavolo in un clic.</p>
-                  <div class="mockup-actions">
-                    <a href="#richiedi-sito" class="mockup-btn-primary">Prenota Tavolo</a>
-                    <a href="#pacchetti" class="mockup-btn-secondary">Menu Digitale QR</a>
-                  </div>
+              <div class="showcase-iframe-stage" id="showcase-iframe-stage">
+                <iframe
+                  id="showcase-demo-iframe"
+                  class="showcase-iframe"
+                  src="https://mgd-studio-web.github.io/pizzeria-forno89PROVA/"
+                  title="Anteprima interattiva dal vivo — Pizzeria Forno 89"
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                ></iframe>
+                <div class="showcase-loader" aria-hidden="true">
+                  <span class="showcase-loader__spinner"></span>
+                  <span>Caricamento demo dal vivo…</span>
                 </div>
-              </div>
-              <div class="mockup-body">
-                <div class="mockup-cards-grid">
-                  <div class="mockup-mini-card">
-                    <div class="mockup-mini-card__top">
-                      <span class="mockup-mini-card__title">Signature Cocktail</span>
-                      <span class="mockup-mini-card__tag">10€</span>
-                    </div>
-                    <span class="mockup-mini-card__desc">Lista drink &amp; aperitivi</span>
-                  </div>
-                  <div class="mockup-mini-card">
-                    <div class="mockup-mini-card__top">
-                      <span class="mockup-mini-card__title">Menu Degustazione</span>
-                      <span class="mockup-mini-card__tag">35€</span>
-                    </div>
-                    <span class="mockup-mini-card__desc">Piatti del giorno &amp; vini</span>
-                  </div>
-                  <div class="mockup-mini-card">
-                    <div class="mockup-mini-card__top">
-                      <span class="mockup-mini-card__title">Prenotazione Rapida</span>
-                      <span class="mockup-mini-card__tag">Online</span>
-                    </div>
-                    <span class="mockup-mini-card__desc">Conferma immediata</span>
-                  </div>
-                </div>
+                <button
+                  type="button"
+                  class="showcase-interact-overlay"
+                  id="showcase-interact-overlay"
+                  aria-label="Tocca per interagire con la demo dal vivo"
+                >
+                  <span class="showcase-interact-pill">👆 Tocca per interagire con la demo</span>
+                </button>
               </div>
             </div>
           </div>
@@ -1875,36 +1986,6 @@
         <p style="text-align:center; font-size:0.82rem; color:var(--text-muted); max-width:820px; margin:0 auto; line-height:1.6;">
           Nessun abbonamento obbligatorio: il sito è tuo. Per eventuali modifiche future puoi scegliere interventi singoli (25€–35€) oppure il piano opzionale <strong>Pensiero Zero</strong> a <strong>15€/mese</strong> (o 150€/anno) che include dominio .it, hosting veloce e fino a 2 aggiornamenti al mese.
         </p>
-
-        <!-- BANNER DEMO DAL VIVO: PIZZERIA FORNO 89 -->
-        <div class="live-demo-banner reveal" id="demo-dal-vivo">
-          <div class="live-demo-banner__info">
-            <span class="live-demo-banner__eyebrow">
-              <span class="live-demo-banner__dot" aria-hidden="true"></span>
-              <span>Prova una nostra demo dal vivo</span>
-            </span>
-            <h3 class="live-demo-banner__title">Pizzeria Forno 89 — Sito Completo + Area Host</h3>
-            <p class="live-demo-banner__desc">Naviga dal vivo il sito realizzato per Pizzeria Forno 89 e prova anche l’Area Admin per gestire prenotazioni e tavoli in tempo reale.</p>
-          </div>
-          <div class="live-demo-banner__actions">
-            <a
-              href="https://mgd-studio-web.github.io/pizzeria-forno89PROVA/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn btn--primary"
-            >
-              Apri Sito Demo →
-            </a>
-            <a
-              href="https://mgd-studio-web.github.io/pizzeria-forno89PROVA/admin.html"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn btn--demo-outline"
-            >
-              Prova Area Host (Admin) →
-            </a>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -1917,6 +1998,26 @@
           <p class="section-subtitle">Esperienze reali di aziende e attività che hanno realizzato il proprio sito web con <strong>MGD Studio</strong>.</p>
         </div>
         <div class="reviews-grid" id="reviews-grid"></div>
+      </div>
+    </section>
+
+    <!-- STRISCIA 3 GARANZIE CONCRETE -->
+    <section class="guarantees-strip" aria-label="Le nostre garanzie">
+      <div class="container">
+        <div class="guarantees-strip__grid">
+          <div class="guarantee-card reveal">
+            <span class="guarantee-card__icon" aria-hidden="true">✓</span>
+            <span class="guarantee-card__text">Bozza e proposta gratuita prima di iniziare</span>
+          </div>
+          <div class="guarantee-card reveal">
+            <span class="guarantee-card__icon" aria-hidden="true">⚡</span>
+            <span class="guarantee-card__text">Consegna rapida in 5–10 giorni lavorativi</span>
+          </div>
+          <div class="guarantee-card reveal">
+            <span class="guarantee-card__icon" aria-hidden="true">💬</span>
+            <span class="guarantee-card__text">Assistenza diretta su WhatsApp con il team</span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -2290,6 +2391,17 @@
                     <button type="button" class="btn btn--primary" id="btn-wizard-next" style="display:none;">Continua →</button>
                     <button type="submit" class="btn btn--primary btn--lg" id="btn-submit-quote" style="display:none;">Ricevi la mia proposta gratuita →</button>
                   </div>
+                  <p class="wizard-wa-shortcut" id="wizard-wa-shortcut">
+                    Preferisci scrivere al volo?
+                    <a
+                      id="btn-step7-whatsapp"
+                      href="https://wa.me/393926500185?text=Ciao%20MGD%20Studio%2C%20sto%20compilando%20il%20configuratore%20sul%20sito%20e%20preferisco%20scrivervi%20direttamente%20su%20WhatsApp."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="wizard-wa-shortcut__link"
+                      data-va-whatsapp="step7_shortcut"
+                    >Scrivici su WhatsApp →</a>
+                  </p>
                   <p class="wizard-reassurance" id="wizard-reassurance">Ti rispondiamo entro 24 ore lavorative · Nessun impegno · Studio locale a Piacenza</p>
                 </form>
               </div>
@@ -2373,7 +2485,7 @@
         <div class="section-header--center reveal">
           <span class="section-eyebrow">Il Team MGD Studio</span>
           <h2 class="section-title">Chi Siamo</h2>
-          <p class="section-subtitle">Siamo tre giovani sviluppatori appassionati di tecnologia, design e sviluppo web.</p>
+          <p class="section-subtitle">Parli direttamente con chi progetta e sviluppa il tuo sito: zero commerciali, zero intermediari, massima rapidità.</p>
         </div>
 
         <div class="team-grid">
@@ -2438,7 +2550,7 @@
               aria-labelledby="faq-trigger-0"
             >
               <div class="faq-panel__inner">
-                <p class="faq-answer">In genere tra i 7 e i 10 giorni lavorativi dalla conferma della bozza e proposta gratuita e dalla consegna dei materiali base (foto, orari e listino).</p>
+                <p class="faq-answer">In genere tra i 5 e i 10 giorni lavorativi (5–7 giorni per il Pacchetto Vetrina) dalla conferma della bozza e proposta gratuita e dalla consegna dei materiali base (foto, orari e listino).</p>
               </div>
             </div>
           </div>
@@ -2490,7 +2602,7 @@
               aria-labelledby="faq-trigger-2"
             >
               <div class="faq-panel__inner">
-                <p class="faq-answer">Nessun costo a sorpresa. Il prezzo del pacchetto è trasparente e nel Pacchetto Completo sono inclusi supporto post-pubblicazione e aggiornamenti concordati. Eventuali rinnovi di dominio, hosting o interventi successivi vengono sempre concordati prima.</p>
+                <p class="faq-answer">Nessun costo a sorpresa e nessun abbonamento obbligatorio: il prezzo del pacchetto (Vetrina 299€, Plus 449€ o Su Misura da 690€) è una tantum e il sito resta tuo. Per eventuali modifiche future puoi richiedere interventi singoli (25€–35€) oppure attivare il piano opzionale <strong>Pensiero Zero</strong> a <strong>15€/mese</strong> (o 150€/anno), che include dominio .it, hosting veloce e fino a 2 aggiornamenti al mese.</p>
               </div>
             </div>
           </div>
@@ -2506,7 +2618,7 @@
         <div>
           <a href="#home" class="brand-logo" aria-label="MGD Studio">
             <span class="brand-logo__footer-badge">
-              <img src="data:image/webp;base64,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" alt="Logo MGD Studio" style="height:32px; width:auto; display:block;" />
+              <img src="./logo.webp" width="280" height="72" alt="Logo MGD Studio" style="height:32px; width:auto; display:block;" />
             </span>
           </a>
           <p class="footer-location">
@@ -2602,7 +2714,7 @@
         <p>Puoi cancellare la bozza in qualsiasi momento cliccando su <strong>Ricomincia</strong> nel configuratore o dalle impostazioni del tuo browser.</p>
 
         <h4>4. Risorse esterne tecniche</h4>
-        <p>Per la resa grafica delle pagine vengono caricate risorse tecniche esterne da <strong>Google Fonts</strong> (caratteri tipografici) e da <strong>Unsplash</strong> (immagini dimostrative utilizzate nei mockup di anteprima).</p>
+        <p>Per la resa grafica delle pagine e la visualizzazione delle demo dal vivo vengono caricate risorse tecniche esterne da <strong>Google Fonts</strong> (caratteri tipografici) e da <strong>GitHub Pages</strong> (anteprima interattiva in <code>&lt;iframe&gt;</code>).</p>
       </div>
     </div>
   </div>
@@ -2624,60 +2736,18 @@
           // { author: 'Nome Cognome', business: 'Attività, Piacenza', rating: 5, text: '...' }
         ]
       },
-      showcaseProjects: [
+      showcaseDemos: [
         {
-          id: 'ristorante',
-          category: '🍸 Ristoranti & Bar',
-          title: 'Lounge & Bistrot Milano',
-          domainPreview: 'loungebistrot.it',
-          badge: 'Ristorante / Cocktail Bar',
-          statusText: 'Aperto oggi · 18:00 - 02:00',
-          imageUrl: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80',
-          headline: 'Sapori autentici & Cocktail d’autore.',
-          subline: 'Scopri il menu digitale da smartphone e prenota il tuo tavolo in un clic.',
-          primaryCta: 'Prenota Tavolo',
-          secondaryCta: 'Menu Digitale QR',
-          cards: [
-            { title: 'Signature Cocktail', tag: '10€', desc: 'Lista drink & aperitivi' },
-            { title: 'Menu Degustazione', tag: '35€', desc: 'Piatti del giorno & vini' },
-            { title: 'Prenotazione Rapida', tag: 'Online', desc: 'Conferma immediata' }
-          ]
+          id: 'forno89',
+          label: 'Pizzeria Forno 89',
+          title: 'Anteprima interattiva dal vivo — Pizzeria Forno 89',
+          url: 'https://mgd-studio-web.github.io/pizzeria-forno89PROVA/'
         },
         {
-          id: 'parrucchiere',
-          category: '✂️ Parrucchieri & Saloni',
-          title: 'Atelier Hair & Beauty',
-          domainPreview: 'atelierhairstudio.it',
-          badge: 'Hair Salon / Barber',
-          statusText: 'Prenotazioni attive 24/7',
-          imageUrl: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80',
-          headline: 'Stile su misura per la tua immagine.',
-          subline: 'Listino trattamenti chiaro, galleria look e richiesta appuntamento online.',
-          primaryCta: 'Prenota Appuntamento',
-          secondaryCta: 'Listino Prezzi',
-          cards: [
-            { title: 'Taglio & Styling', tag: '30€', desc: 'Consulenza d’immagine' },
-            { title: 'Colorazione & Luce', tag: '55€', desc: 'Prodotti professionali' },
-            { title: 'Galleria Lavori', tag: 'Foto', desc: 'Prima e dopo reali' }
-          ]
-        },
-        {
-          id: 'negozio',
-          category: '🏢 Negozi & Aziende',
-          title: 'Showroom & Studio',
-          domainPreview: 'showroomattivita.it',
-          badge: 'Negozio / Azienda Locale',
-          statusText: 'Preventivi gratuiti online',
-          imageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=900&q=80',
-          headline: 'I tuoi prodotti e servizi sempre visibili.',
-          subline: 'Vetrina moderna ottimizzata su Google per farti trovare dai clienti della tua zona.',
-          primaryCta: 'Richiedi Preventivo',
-          secondaryCta: 'Catalogo Prodotti',
-          cards: [
-            { title: 'Catalogo Vetrina', tag: 'HD', desc: 'Schede prodotti chiare' },
-            { title: 'Modulo Preventivi', tag: '24h', desc: 'Richieste via email' },
-            { title: 'Posizione & Orari', tag: 'Maps', desc: 'Indicazioni stradali' }
-          ]
+          id: 'admin',
+          label: 'Area Host (Admin)',
+          title: 'Anteprima interattiva dal vivo — Area Host (Admin) Pizzeria Forno 89',
+          url: 'https://mgd-studio-web.github.io/pizzeria-forno89PROVA/admin.html'
         }
       ],
       packages: [
@@ -2745,43 +2815,6 @@
 
     renderReviews();
 
-    function renderMockupInner(project) {
-      return `
-        <div class="mockup-notch"></div>
-        <div class="mockup-nav">
-          <span class="mockup-brand">${project.title}</span>
-          <span class="mockup-badge">${project.badge}</span>
-        </div>
-        <div class="mockup-visual-hero" style="background-image:url('${project.imageUrl}');">
-          <div class="mockup-visual-content">
-            <div class="mockup-status-pill">
-              <span class="mockup-status-dot"></span>
-              <span>${project.statusText}</span>
-            </div>
-            <p class="mockup-headline">${project.headline}</p>
-            <p class="mockup-subline">${project.subline}</p>
-            <div class="mockup-actions">
-              <a href="#richiedi-sito" class="mockup-btn-primary">${project.primaryCta}</a>
-              <a href="#pacchetti" class="mockup-btn-secondary">${project.secondaryCta}</a>
-            </div>
-          </div>
-        </div>
-        <div class="mockup-body">
-          <div class="mockup-cards-grid">
-            ${project.cards.map(c => `
-              <div class="mockup-mini-card">
-                <div class="mockup-mini-card__top">
-                  <span class="mockup-mini-card__title">${c.title}</span>
-                  <span class="mockup-mini-card__tag">${c.tag}</span>
-                </div>
-                <span class="mockup-mini-card__desc">${c.desc}</span>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `;
-    }
-
     // Animazione fluida allo scorrimento
     const revealEls = document.querySelectorAll('.reveal');
     if ('IntersectionObserver' in window) {
@@ -2811,24 +2844,137 @@
       }));
     }
 
+    const showcaseFrame = document.getElementById('showcase-mockup-frame');
+    const showcaseStage = document.getElementById('showcase-iframe-stage');
+    const showcaseIframe = document.getElementById('showcase-demo-iframe');
+    const showcaseDomainUrl = document.getElementById('showcase-domain-url');
+    const showcaseOpenBtn = document.getElementById('showcase-open-btn');
+    const showcaseOverlay = document.getElementById('showcase-interact-overlay');
+    let showcaseLoaderTimer = null;
+
+    function setShowcaseInteractive(active) {
+      if (!showcaseFrame || !showcaseOverlay) return;
+      showcaseFrame.classList.toggle('is-interactive', Boolean(active));
+      showcaseOverlay.setAttribute('aria-hidden', active ? 'true' : 'false');
+      showcaseOverlay.tabIndex = active ? -1 : 0;
+    }
+
+    function clearShowcaseLoader() {
+      if (showcaseLoaderTimer) {
+        clearTimeout(showcaseLoaderTimer);
+        showcaseLoaderTimer = null;
+      }
+      if (showcaseFrame) showcaseFrame.classList.remove('is-loading');
+    }
+
+    function startShowcaseLoader() {
+      if (!showcaseFrame) return;
+      showcaseFrame.classList.add('is-loading');
+      if (showcaseLoaderTimer) clearTimeout(showcaseLoaderTimer);
+      showcaseLoaderTimer = setTimeout(clearShowcaseLoader, 4500);
+    }
+
+    let lastShowcaseStageWidth = 0;
+    let showcaseScaleRaf = 0;
+
+    function updateShowcaseScale(force) {
+      if (!showcaseFrame || !showcaseStage) return;
+      if (showcaseFrame.classList.contains('is-mobile')) return;
+      const stageWidth = showcaseStage.clientWidth;
+      if (!stageWidth) return;
+      if (!force && stageWidth === lastShowcaseStageWidth) return;
+      lastShowcaseStageWidth = stageWidth;
+      const DESKTOP_WIDTH = 1280;
+      const scale = stageWidth / DESKTOP_WIDTH;
+      const stageHeight = Math.min(410, Math.max(220, Math.round(stageWidth * 0.67)));
+      const iframeHeight = Math.ceil(stageHeight / scale);
+      showcaseStage.style.setProperty('--showcase-scale', scale.toFixed(6));
+      showcaseStage.style.setProperty('--showcase-stage-h', stageHeight + 'px');
+      showcaseStage.style.setProperty('--showcase-iframe-h', iframeHeight + 'px');
+    }
+
+    function scheduleShowcaseScale(force) {
+      if (showcaseScaleRaf) cancelAnimationFrame(showcaseScaleRaf);
+      showcaseScaleRaf = requestAnimationFrame(() => {
+        showcaseScaleRaf = 0;
+        updateShowcaseScale(force);
+      });
+    }
+
+    if (showcaseIframe) {
+      showcaseIframe.addEventListener('load', clearShowcaseLoader);
+      if (document.readyState === 'complete') {
+        clearShowcaseLoader();
+      } else {
+        window.addEventListener('load', clearShowcaseLoader, { once: true });
+        showcaseLoaderTimer = setTimeout(clearShowcaseLoader, 4500);
+      }
+    }
+
+    if (showcaseOverlay) {
+      showcaseOverlay.addEventListener('click', () => {
+        setShowcaseInteractive(true);
+      });
+    }
+
     document.querySelectorAll('[data-showcase-tab]').forEach(tab => {
       tab.addEventListener('click', () => {
-        const proj = siteConfig.showcaseProjects.find(p => p.id === tab.getAttribute('data-showcase-tab'));
-        if (!proj) return;
-        document.querySelectorAll('[data-showcase-tab]').forEach(t => t.classList.remove('is-active'));
+        const demo = siteConfig.showcaseDemos.find(d => d.id === tab.getAttribute('data-showcase-tab'));
+        if (!demo) return;
+        document.querySelectorAll('[data-showcase-tab]').forEach(t => {
+          t.classList.remove('is-active');
+          t.setAttribute('aria-selected', 'false');
+        });
         tab.classList.add('is-active');
-        document.getElementById('showcase-domain-url').textContent = '🔒 https://' + proj.domainPreview;
-        document.getElementById('showcase-mockup-frame').innerHTML = renderMockupInner(proj);
+        tab.setAttribute('aria-selected', 'true');
+        if (showcaseDomainUrl) {
+          showcaseDomainUrl.textContent = '🔒 ' + demo.url;
+          showcaseDomainUrl.title = demo.url;
+        }
+        if (showcaseOpenBtn) {
+          showcaseOpenBtn.href = demo.url;
+          showcaseOpenBtn.setAttribute('aria-label', 'Apri ' + demo.label + ' a schermo intero in una nuova scheda');
+        }
+        setShowcaseInteractive(false);
+        if (showcaseIframe) {
+          showcaseIframe.title = demo.title;
+          if (showcaseIframe.getAttribute('src') !== demo.url) {
+            startShowcaseLoader();
+            showcaseIframe.src = demo.url;
+          }
+        }
       });
     });
 
     document.querySelectorAll('[data-device-mode]').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('[data-device-mode]').forEach(b => b.classList.remove('is-active'));
+        const isMobile = btn.getAttribute('data-device-mode') === 'mobile';
+        document.querySelectorAll('[data-device-mode]').forEach(b => {
+          b.classList.remove('is-active');
+          b.setAttribute('aria-pressed', 'false');
+        });
         btn.classList.add('is-active');
-        document.getElementById('showcase-mockup-frame').classList.toggle('is-mobile', btn.getAttribute('data-device-mode') === 'mobile');
+        btn.setAttribute('aria-pressed', 'true');
+        if (showcaseFrame) {
+          showcaseFrame.classList.toggle('is-mobile', isMobile);
+        }
+        if (!isMobile) {
+          lastShowcaseStageWidth = 0;
+          updateShowcaseScale(true);
+          scheduleShowcaseScale(true);
+        }
       });
     });
+
+    updateShowcaseScale(true);
+    if ('ResizeObserver' in window && showcaseStage) {
+      const showcaseResizeObserver = new ResizeObserver(() => {
+        scheduleShowcaseScale(false);
+      });
+      showcaseResizeObserver.observe(showcaseStage);
+    } else {
+      window.addEventListener('resize', () => scheduleShowcaseScale(false));
+    }
 
     const TOTAL_STEPS = 7;
     let currentStep = 1;
@@ -2931,6 +3077,8 @@
     const chatEditingBanner = document.getElementById('chat-editing-banner');
     const chatEditingText = document.getElementById('chat-editing-text');
     const btnReturnFromEdit = document.getElementById('btn-return-from-edit');
+    const waStep7Shortcut = document.getElementById('wizard-wa-shortcut');
+    const waStep7Link = document.getElementById('btn-step7-whatsapp');
     const reassuranceNote = document.getElementById('wizard-reassurance');
     const dynamicFeaturesGrid = document.getElementById('dynamic-features-grid');
     const extraFeaturesGrid = document.getElementById('extra-features-grid');
@@ -3785,7 +3933,17 @@
       }
 
       submitBtn.style.display = currentStep === TOTAL_STEPS ? 'inline-flex' : 'none';
+      if (waStep7Shortcut) waStep7Shortcut.classList.toggle('is-visible', currentStep === TOTAL_STEPS);
       if (reassuranceNote) reassuranceNote.classList.toggle('is-visible', currentStep === TOTAL_STEPS);
+      if (waStep7Link && currentStep === TOTAL_STEPS) {
+        const waNumber = siteConfig.contact.whatsappNumber || '393926500185';
+        const biz = (document.getElementById('input-business-name')?.value || '').trim();
+        const pkg = getSelectedPackage();
+        const waMsg = biz
+          ? `Ciao MGD Studio, ho configurato la proposta sul sito per ${biz} (${pkg.name} ${pkg.price}) e preferisco scrivervi direttamente su WhatsApp.`
+          : `Ciao MGD Studio, sto compilando il configuratore sul sito (${pkg.name} ${pkg.price}) e preferisco scrivervi direttamente su WhatsApp.`;
+        waStep7Link.href = `https://wa.me/${waNumber}?text=${encodeURIComponent(waMsg)}`;
+      }
 
       renderChatMessages();
       renderProjectSheet();
