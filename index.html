@@ -821,6 +821,13 @@
       color: var(--text-primary);
       background: var(--bg-secondary);
     }
+    .chat-reset-btn svg {
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
+    }
+    .chat-reset-btn:hover svg {
+      transform: rotate(-45deg);
+    }
     .chat-reset-btn:focus-visible {
       outline: 2px solid var(--accent-blue);
       outline-offset: 2px;
@@ -857,6 +864,18 @@
       font-size: 0.88rem;
       line-height: 1.5;
       overflow-wrap: anywhere;
+    }
+    .chat-bubble--with-icon {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .chat-bubble__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
     }
     .chat-msg--bot .chat-bubble {
       background: #ffffff;
@@ -1034,23 +1053,42 @@
       padding: 12px 34px 12px 13px;
     }
     .choice-card--style { padding: 12px 34px 12px 13px; }
-    .choice-card--timeline { padding: 12px 34px 12px 13px; }
+    .choice-card--timeline {
+      flex-direction: row;
+      align-items: center;
+      gap: 11px;
+      padding: 12px 34px 12px 13px;
+    }
+    .choice-card__body {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
     .choice-card__icon {
       width: 36px;
       height: 36px;
       border-radius: 11px;
       background: var(--bg-secondary);
       border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.1rem;
       flex-shrink: 0;
-      transition: background-color 0.2s ease, border-color 0.2s ease;
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .choice-card:hover .choice-card__icon {
+      background: var(--accent-blue-soft);
+      border-color: var(--accent-blue-subtle);
+      color: var(--accent-blue);
+      transform: scale(1.04);
     }
     .choice-card.is-selected .choice-card__icon {
       background: #ffffff;
       border-color: var(--accent-blue-subtle);
+      color: var(--accent-blue);
+      box-shadow: 0 4px 10px -4px rgba(0, 82, 255, 0.22);
     }
     .choice-card__rec-badge {
       display: none;
@@ -1247,8 +1285,17 @@
       gap: 8px;
       min-width: 0;
     }
+    .sheet-mobile-toggle__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #93c5fd;
+      flex-shrink: 0;
+    }
     .sheet-mobile-toggle__chevron {
-      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       color: #93c5fd;
       transition: transform 0.22s ease;
       flex-shrink: 0;
@@ -1371,6 +1418,20 @@
       color: #cbd5e1;
       margin-top: 2px;
       overflow-wrap: anywhere;
+    }
+    .sheet-item__sub--with-icon {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      margin-top: 3px;
+    }
+    .sheet-item__sub-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #60a5fa;
+      flex-shrink: 0;
+      margin-top: 2px;
     }
     .sheet-pkg-badge {
       display: inline-flex;
@@ -2052,7 +2113,7 @@
                   <div class="chat-header__controls">
                     <span class="chat-step-pill" id="chat-step-pill">Step 1 di 7</span>
                     <button type="button" class="chat-reset-btn" id="btn-reset-wizard" data-reset-wizard aria-label="Ricomincia configurazione">
-                      <span aria-hidden="true">↺</span>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
                       <span>Ricomincia</span>
                     </button>
                   </div>
@@ -2066,7 +2127,7 @@
               <div class="chat-messages" id="chat-messages" aria-live="polite">
                 <div class="chat-msg chat-msg--bot">
                   <span class="chat-bubble__meta">Assistente MGD Studio</span>
-                  <div class="chat-bubble">Ciao! 👋 Ti guido passo passo nella creazione della tua proposta su misura in meno di 1 minuto. <strong>Di che tipo di attività si tratta?</strong></div>
+                  <div class="chat-bubble">Ciao! Ti guido passo passo nella configurazione del tuo sito web in meno di 1 minuto. <strong>Di che tipo di attività si tratta?</strong></div>
                 </div>
               </div>
 
@@ -2090,27 +2151,37 @@
                     <div class="choice-cards-grid choice-cards-grid--categories">
                       <label class="choice-card choice-card--category" data-category-card="Ristorante / Pizzeria / Bar">
                         <input type="radio" name="businessType" value="Ristorante / Pizzeria / Bar" />
-                        <span class="choice-card__icon" aria-hidden="true">🍽️</span>
+                        <span class="choice-card__icon" aria-hidden="true">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
+                        </span>
                         <span class="choice-card__title">Ristorante / Pizzeria / Bar</span>
                       </label>
                       <label class="choice-card choice-card--category" data-category-card="Negozio / Attività locale">
                         <input type="radio" name="businessType" value="Negozio / Attività locale" />
-                        <span class="choice-card__icon" aria-hidden="true">🛍️</span>
+                        <span class="choice-card__icon" aria-hidden="true">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                        </span>
                         <span class="choice-card__title">Negozio / Attività locale</span>
                       </label>
                       <label class="choice-card choice-card--category" data-category-card="Professionista / Studio">
                         <input type="radio" name="businessType" value="Professionista / Studio" />
-                        <span class="choice-card__icon" aria-hidden="true">💼</span>
+                        <span class="choice-card__icon" aria-hidden="true">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                        </span>
                         <span class="choice-card__title">Professionista / Studio</span>
                       </label>
                       <label class="choice-card choice-card--category" data-category-card="Artigiano / Servizi">
                         <input type="radio" name="businessType" value="Artigiano / Servizi" />
-                        <span class="choice-card__icon" aria-hidden="true">🛠️</span>
+                        <span class="choice-card__icon" aria-hidden="true">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                        </span>
                         <span class="choice-card__title">Artigiano / Servizi</span>
                       </label>
                       <label class="choice-card choice-card--category" data-category-card="Altro">
                         <input type="radio" name="businessType" value="Altro" />
-                        <span class="choice-card__icon" aria-hidden="true">✨</span>
+                        <span class="choice-card__icon" aria-hidden="true">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="14" rx="1.5"/><rect width="7" height="7" x="3" y="14" rx="1.5"/></svg>
+                        </span>
                         <span class="choice-card__title">Altro</span>
                       </label>
                     </div>
@@ -2157,7 +2228,7 @@
                       </label>
                       <label class="choice-card choice-card--package is-selected is-recommended" data-package-card="plus">
                         <input type="radio" name="selectedPackage" value="plus" checked />
-                        <span class="choice-card__rec-badge" data-rec-badge>★ Più scelto</span>
+                        <span class="choice-card__rec-badge" data-rec-badge>Più scelto</span>
                         <span class="choice-card__title">Pacchetto Plus</span>
                         <span class="choice-card__price-row">
                           <span class="choice-card__price">449€</span>
@@ -2322,23 +2393,43 @@
                         <div class="choice-cards-grid choice-cards-grid--timeline">
                           <label class="choice-card choice-card--timeline" data-timeline-card="Il prima possibile (1-2 settimane)">
                             <input type="radio" name="timeline" value="Il prima possibile (1-2 settimane)" />
-                            <span class="choice-card__title">⚡ 1–2 settimane</span>
-                            <span class="choice-card__meta">Il prima possibile</span>
+                            <span class="choice-card__icon" aria-hidden="true">
+                              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                            </span>
+                            <span class="choice-card__body">
+                              <span class="choice-card__title">1–2 settimane</span>
+                              <span class="choice-card__meta">Il prima possibile</span>
+                            </span>
                           </label>
                           <label class="choice-card choice-card--timeline" data-timeline-card="Entro 3-4 settimane">
                             <input type="radio" name="timeline" value="Entro 3-4 settimane" />
-                            <span class="choice-card__title">📅 3–4 settimane</span>
-                            <span class="choice-card__meta">Tempistica ideale</span>
+                            <span class="choice-card__icon" aria-hidden="true">
+                              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                            </span>
+                            <span class="choice-card__body">
+                              <span class="choice-card__title">3–4 settimane</span>
+                              <span class="choice-card__meta">Tempistica ideale</span>
+                            </span>
                           </label>
                           <label class="choice-card choice-card--timeline" data-timeline-card="Entro 1-2 mesi">
                             <input type="radio" name="timeline" value="Entro 1-2 mesi" />
-                            <span class="choice-card__title">🗓️ 1–2 mesi</span>
-                            <span class="choice-card__meta">Con calma</span>
+                            <span class="choice-card__icon" aria-hidden="true">
+                              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="M8 14h8"/><path d="M8 18h5"/></svg>
+                            </span>
+                            <span class="choice-card__body">
+                              <span class="choice-card__title">1–2 mesi</span>
+                              <span class="choice-card__meta">Con calma</span>
+                            </span>
                           </label>
                           <label class="choice-card choice-card--timeline" data-timeline-card="Non ho fretta">
                             <input type="radio" name="timeline" value="Non ho fretta" />
-                            <span class="choice-card__title">🌿 Non ho fretta</span>
-                            <span class="choice-card__meta">Flessibile</span>
+                            <span class="choice-card__icon" aria-hidden="true">
+                              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>
+                            </span>
+                            <span class="choice-card__body">
+                              <span class="choice-card__title">Non ho fretta</span>
+                              <span class="choice-card__meta">Flessibile</span>
+                            </span>
                           </label>
                         </div>
                         <span class="field-error-msg" id="err-timeline"></span>
@@ -2412,10 +2503,14 @@
               <aside class="project-sheet" id="project-sheet" aria-label="Scheda progetto dal vivo">
                 <button type="button" class="sheet-mobile-toggle" id="btn-toggle-project-sheet" aria-expanded="false" aria-controls="project-sheet-body">
                   <span class="sheet-mobile-toggle__left">
-                    <span aria-hidden="true">📋</span>
+                    <span class="sheet-mobile-toggle__icon" aria-hidden="true">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+                    </span>
                     <span id="sheet-mobile-label">Scheda progetto (0/7 completati)</span>
                   </span>
-                  <span class="sheet-mobile-toggle__chevron" aria-hidden="true">▾</span>
+                  <span class="sheet-mobile-toggle__chevron" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
                 </button>
 
                 <div class="sheet-desktop-header">
@@ -2999,37 +3094,40 @@
     const SUBMIT_COOLDOWN_KEY = 'mgd_quote_last_submit_ts';
     const SUBMIT_COOLDOWN_MS = 45000;
 
+    const CONFIGURATOR_ICONS = {
+      check: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+      info: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>',
+      pin: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>',
+      link: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>',
+      note: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/></svg>'
+    };
+
     const CATEGORY_SMART_CONFIG = {
       'Ristorante / Pizzeria / Bar': {
-        icon: '🍽️',
         recommendedPkg: 'plus',
         badge: 'Consigliato per ristoranti',
         features: ['Menu digitale QR', 'Prenotazione tavoli', 'Ordini WhatsApp', 'Galleria piatti', 'Mappa e orari', 'Recensioni'],
         defaults: ['Menu digitale QR', 'Prenotazione tavoli', 'Mappa e orari']
       },
       'Negozio / Attività locale': {
-        icon: '🛍️',
         recommendedPkg: 'plus',
         badge: 'Più scelto dai negozi',
         features: ['Vetrina prodotti', 'Offerte in evidenza', 'Contatto rapido WhatsApp', 'Orari e mappa', 'Galleria negozio', 'Recensioni'],
         defaults: ['Vetrina prodotti', 'Contatto rapido WhatsApp', 'Orari e mappa']
       },
       'Professionista / Studio': {
-        icon: '💼',
         recommendedPkg: 'vetrina',
         badge: 'Ideale per professionisti',
         features: ['Schede servizi', 'Prenotazione consulenza', 'Chi siamo / Team', 'Casi studio', 'FAQ', 'Modulo contatti'],
         defaults: ['Schede servizi', 'Prenotazione consulenza', 'Modulo contatti']
       },
       'Artigiano / Servizi': {
-        icon: '🛠️',
         recommendedPkg: 'vetrina',
         badge: 'Ideale per artigiani',
         features: ['Elenco lavori/servizi', 'Galleria prima/dopo', 'Richiesta sopralluogo', 'Zone servite', 'WhatsApp rapido', 'Recensioni'],
         defaults: ['Elenco lavori/servizi', 'Galleria prima/dopo', 'WhatsApp rapido']
       },
       'Altro': {
-        icon: '✨',
         recommendedPkg: 'plus',
         badge: 'Più scelto',
         features: ['Chi siamo', 'Servizi', 'Galleria foto', 'Listino/Catalogo', 'Contatti e mappa', 'FAQ'],
@@ -3541,7 +3639,7 @@
       const limitLabel = max !== null ? `fino a <strong>${max} sezioni</strong>` : '<strong>sezioni illimitate</strong>';
       switch (step) {
         case 1:
-          return 'Ciao! 👋 Ti guido passo passo nella configurazione del tuo sito web in meno di 1 minuto. <strong>Di che tipo di attività si tratta?</strong>';
+          return 'Ciao! Ti guido passo passo nella configurazione del tuo sito web in meno di 1 minuto. <strong>Di che tipo di attività si tratta?</strong>';
         case 2:
           return 'Perfetto! <strong>Come si chiama la tua attività</strong> e in che città si trova?';
         case 3:
@@ -3555,7 +3653,7 @@
         case 6:
           return 'Ci siamo quasi! <strong>Quando vorresti il sito pronto?</strong> Se vuoi, aggiungi anche un link al tuo sito attuale, Instagram o Google Maps.';
         case 7:
-          return 'Fantastico! 🎉 La tua Scheda Progetto è pronta: <strong>dove ti inviamo la proposta gratuita?</strong>';
+          return 'Fantastico! La tua Scheda Progetto è pronta: <strong>dove ti inviamo la proposta gratuita?</strong>';
         default:
           return '';
       }
@@ -3573,11 +3671,8 @@
       const link = (document.getElementById('input-social-or-site-link')?.value || '').trim();
 
       switch (step) {
-        case 1: {
-          if (!cat) return '';
-          const icon = CATEGORY_SMART_CONFIG[cat]?.icon || '✨';
-          return `${icon} ${cat}`;
-        }
+        case 1:
+          return cat || '';
         case 2:
           if (!bizName) return '';
           return bizAddr ? `${bizName} · ${bizAddr}` : bizName;
@@ -3608,7 +3703,7 @@
         const limitPart = max !== null ? `fino a ${max} sezioni` : 'sezioni illimitate';
         chunks.push(`
           <div class="chat-msg chat-msg--bot chat-msg--notice">
-            <div class="chat-bubble">✓ Pacchetto preselezionato: <strong>${escapeHtml(pkg.name)}</strong> (${escapeHtml(pkg.price)} una tantum · ${escapeHtml(limitPart)}) — già visibile nella Scheda Progetto.</div>
+            <div class="chat-bubble chat-bubble--with-icon"><span class="chat-bubble__icon" aria-hidden="true">${CONFIGURATOR_ICONS.check}</span><span>Pacchetto preselezionato: <strong>${escapeHtml(pkg.name)}</strong> (${escapeHtml(pkg.price)} una tantum · ${escapeHtml(limitPart)}) — già visibile nella Scheda Progetto.</span></div>
           </div>
         `);
       }
@@ -3637,7 +3732,7 @@
       if (lastDowngradeMessage) {
         chunks.push(`
           <div class="chat-msg chat-msg--bot chat-msg--downgrade">
-            <div class="chat-bubble">ℹ️ ${escapeHtml(lastDowngradeMessage)}</div>
+            <div class="chat-bubble chat-bubble--with-icon"><span class="chat-bubble__icon" aria-hidden="true">${CONFIGURATOR_ICONS.info}</span><span>${escapeHtml(lastDowngradeMessage)}</span></div>
           </div>
         `);
       }
@@ -3652,7 +3747,6 @@
       if (!projectSheetItems) return;
 
       const cat = getSelectedCategory();
-      const catIcon = CATEGORY_SMART_CONFIG[cat]?.icon || '';
       const bizName = (document.getElementById('input-business-name')?.value || '').trim();
       const bizAddr = (document.getElementById('input-business-address')?.value || '').trim();
       const pkg = getSelectedPackage();
@@ -3678,7 +3772,7 @@
           step: 1,
           label: 'Categoria',
           filled: Boolean(cat),
-          valueHtml: cat ? `${escapeHtml(catIcon)} ${escapeHtml(cat)}` : '',
+          valueHtml: cat ? escapeHtml(cat) : '',
           placeholder: 'Seleziona allo Step 1'
         },
         {
@@ -3686,7 +3780,7 @@
           label: 'Attività e Città',
           filled: bizName.length >= 2,
           valueHtml: bizName
-            ? `${escapeHtml(bizName)}${bizAddr ? `<span class="sheet-item__sub">📍 ${escapeHtml(bizAddr)}</span>` : ''}`
+            ? `${escapeHtml(bizName)}${bizAddr ? `<span class="sheet-item__sub sheet-item__sub--with-icon"><span class="sheet-item__sub-icon" aria-hidden="true">${CONFIGURATOR_ICONS.pin}</span><span>${escapeHtml(bizAddr)}</span></span>` : ''}`
             : '',
           placeholder: 'Nome attività e città'
         },
@@ -3722,7 +3816,7 @@
           label: 'Tempistica e Riferimenti',
           filled: timeFilled,
           valueHtml: timeFilled
-            ? `${escapeHtml(timeline)}${link ? `<span class="sheet-item__sub">🔗 ${escapeHtml(link)}</span>` : ''}${desc ? `<span class="sheet-item__sub">📝 ${escapeHtml(desc.length > 75 ? desc.slice(0, 75) + '…' : desc)}</span>` : ''}`
+            ? `${escapeHtml(timeline)}${link ? `<span class="sheet-item__sub sheet-item__sub--with-icon"><span class="sheet-item__sub-icon" aria-hidden="true">${CONFIGURATOR_ICONS.link}</span><span>${escapeHtml(link)}</span></span>` : ''}${desc ? `<span class="sheet-item__sub sheet-item__sub--with-icon"><span class="sheet-item__sub-icon" aria-hidden="true">${CONFIGURATOR_ICONS.note}</span><span>${escapeHtml(desc.length > 75 ? desc.slice(0, 75) + '…' : desc)}</span></span>` : ''}`
             : '',
           placeholder: 'Tempi, link o note'
         },
