@@ -65,7 +65,7 @@
             "name": "Ci sono costi nascosti ogni mese?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Nessun costo a sorpresa e nessun abbonamento obbligatorio: il prezzo del pacchetto (Vetrina 299€, Plus 449€ o Su Misura da 690€) è una tantum e il sito resta tuo. Il dominio è sempre escluso e intestato direttamente a te. Per eventuali modifiche future puoi richiedere interventi singoli (25€–35€) oppure attivare il piano opzionale Pensiero Zero a 15€/mese o 150€/anno (2 mesi gratis), che include hosting veloce e sicurezza SSL, fino a 2 aggiornamenti al mese (testi, foto, orari, prezzi) e assistenza prioritaria su WhatsApp."
+              "text": "Nessun costo a sorpresa e nessun abbonamento obbligatorio: il prezzo del pacchetto (Vetrina 299€, Plus 449€ o Su Misura da 690€) è una tantum, con dominio e hosting esclusi, e il sito resta tuo. Il dominio è sempre intestato direttamente a te; l’hosting veloce con sicurezza SSL è gestibile autonomamente oppure incluso nel piano opzionale Pensiero Zero a 15€/mese o 150€/anno (2 mesi gratis), che comprende anche fino a 2 aggiornamenti al mese (testi, foto, orari, prezzi) e assistenza prioritaria su WhatsApp. In alternativa, per singole modifiche sono disponibili interventi spot (25€–35€)."
             }
           }
         ]
@@ -264,6 +264,9 @@
       overflow-x: auto;
     }
     .showcase-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       padding: 8px 14px;
       font-size: 0.79rem;
       font-weight: 700;
@@ -275,6 +278,7 @@
       white-space: nowrap;
       transition: all var(--transition-fast);
     }
+    .showcase-tab svg { flex-shrink: 0; }
     .showcase-tab:hover { color: #ffffff; background: rgba(255, 255, 255, 0.1); }
     .showcase-tab:focus-visible { outline: 2px solid #60a5fa; outline-offset: 2px; }
     .showcase-tab.is-active {
@@ -315,11 +319,14 @@
     .browser-dot--green { background: #22c55e; }
     .browser-url {
       flex: 1; min-width: 0;
+      display: flex; align-items: center; gap: 6px;
       background: #0f172a; border: 1px solid #334155;
       border-radius: 6px; padding: 4px 10px;
       font-size: 0.71rem; font-family: var(--font-mono); color: #e2e8f0;
-      text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      text-align: left;
     }
+    .browser-url__icon { color: #4ade80; flex-shrink: 0; }
+    .browser-url__text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .showcase-bar-actions {
       display: inline-flex;
       align-items: center;
@@ -327,7 +334,8 @@
       flex-shrink: 0;
     }
     .showcase-device-toggle { display: inline-flex; background: #0f172a; border: 1px solid #334155; border-radius: 7px; padding: 2px; }
-    .device-btn { padding: 4px 9px; font-size: 0.71rem; font-weight: 700; border: none; background: transparent; color: #94a3b8; border-radius: 5px; cursor: pointer; white-space: nowrap; transition: all var(--transition-fast); }
+    .device-btn { display: inline-flex; align-items: center; gap: 5px; padding: 4px 9px; font-size: 0.71rem; font-weight: 700; border: none; background: transparent; color: #94a3b8; border-radius: 5px; cursor: pointer; white-space: nowrap; transition: all var(--transition-fast); }
+    .device-btn svg { flex-shrink: 0; }
     .device-btn:hover { color: #e2e8f0; }
     .device-btn:focus-visible { outline: 2px solid #60a5fa; outline-offset: 1px; }
     .device-btn.is-active { background: var(--accent-blue); color: #ffffff; }
@@ -1961,8 +1969,14 @@
 
         <div class="showcase-panel reveal is-visible">
           <div class="showcase-tabs" role="tablist" aria-label="Demo interattive dal vivo">
-            <button type="button" class="showcase-tab is-active" role="tab" aria-selected="true" data-showcase-tab="forno89">🍕 Pizzeria Forno 89</button>
-            <button type="button" class="showcase-tab" role="tab" aria-selected="false" data-showcase-tab="admin">🖥️ Area Host (Admin)</button>
+            <button type="button" class="showcase-tab is-active" role="tab" aria-selected="true" data-showcase-tab="forno89">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <span>Pizzeria Forno 89</span>
+            </button>
+            <button type="button" class="showcase-tab" role="tab" aria-selected="false" data-showcase-tab="admin">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+              <span>Area Host (Admin)</span>
+            </button>
           </div>
           <div class="showcase-caption">
             <span class="showcase-caption__dot" aria-hidden="true"></span>
@@ -1974,11 +1988,20 @@
               <span class="browser-dot browser-dot--yellow"></span>
               <span class="browser-dot browser-dot--green"></span>
             </div>
-            <div class="browser-url" id="showcase-domain-url" title="https://mgd-studio-web.github.io/pizzeria-forno89PROVA/">🔒 https://mgd-studio-web.github.io/pizzeria-forno89PROVA/</div>
+            <div class="browser-url" id="showcase-domain-url" title="demo.mgdstudio.it/forno89">
+              <svg class="browser-url__icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span class="browser-url__text" id="showcase-domain-text">demo.mgdstudio.it/forno89</span>
+            </div>
             <div class="showcase-bar-actions">
               <div class="showcase-device-toggle" role="group" aria-label="Modalità di visualizzazione">
-                <button type="button" class="device-btn is-active" data-device-mode="desktop" aria-pressed="true">💻 PC</button>
-                <button type="button" class="device-btn" data-device-mode="mobile" aria-pressed="false">📱 Telefono</button>
+                <button type="button" class="device-btn is-active" data-device-mode="desktop" aria-pressed="true">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+                  <span>PC</span>
+                </button>
+                <button type="button" class="device-btn" data-device-mode="mobile" aria-pressed="false">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+                  <span>Telefono</span>
+                </button>
               </div>
               <a
                 href="https://mgd-studio-web.github.io/pizzeria-forno89PROVA/"
@@ -2014,7 +2037,10 @@
                   id="showcase-interact-overlay"
                   aria-label="Tocca per interagire con la demo dal vivo"
                 >
-                  <span class="showcase-interact-pill">👆 Tocca per interagire con la demo</span>
+                  <span class="showcase-interact-pill">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 4 7.07 17 2.51-7.39L21 11.07z"/></svg>
+                    <span>Tocca per interagire con la demo</span>
+                  </span>
                 </button>
               </div>
             </div>
@@ -2066,7 +2092,7 @@
               <h3 class="pricing-name">PACCHETTO VETRINA</h3>
               <div class="pricing-price-wrap">
                 <span class="pricing-price">299€</span>
-                <span class="pricing-billing">una tantum · dominio escluso</span>
+                <span class="pricing-billing">una tantum · dominio e hosting esclusi</span>
               </div>
               <ul class="pricing-features">
                 <li class="pricing-feature-item"><span class="pricing-check">✓</span><span>Sito one-page veloce</span></li>
@@ -2074,7 +2100,7 @@
                 <li class="pricing-feature-item"><span class="pricing-check">✓</span><span>Orari e informazioni</span></li>
                 <li class="pricing-feature-item"><span class="pricing-check">✓</span><span>Pulsante WhatsApp diretto</span></li>
                 <li class="pricing-feature-item"><span class="pricing-check">✓</span><span>Modulo contatti</span></li>
-                <li class="pricing-feature-item"><span class="pricing-check">✓</span><span>Pronto in 5–7 giorni lavorativi</span></li>
+                <li class="pricing-feature-item"><span class="pricing-check">✓</span><span>Pronto in 5–7 giorni lavorativi dalla consegna dei materiali</span></li>
                 <li class="pricing-feature-item"><span class="pricing-check">✓</span><span>Fino a 5 sezioni</span></li>
               </ul>
             </div>
@@ -2089,7 +2115,7 @@
               <h3 class="pricing-name">PACCHETTO PLUS</h3>
               <div class="pricing-price-wrap">
                 <span class="pricing-price">449€</span>
-                <span class="pricing-billing">una tantum · dominio escluso</span>
+                <span class="pricing-billing">una tantum · dominio e hosting esclusi</span>
               </div>
               <ul class="pricing-features">
                 <li class="pricing-feature-item"><span class="pricing-check">✓</span><span>Tutto ciò che è nel pacchetto Vetrina</span></li>
@@ -2108,7 +2134,7 @@
               <h3 class="pricing-name">PACCHETTO SU MISURA</h3>
               <div class="pricing-price-wrap">
                 <span class="pricing-price">da 690€</span>
-                <span class="pricing-billing">una tantum · in base a pagine e funzioni (dominio escluso)</span>
+                <span class="pricing-billing">una tantum · in base a pagine e funzioni · dominio e hosting esclusi</span>
               </div>
               <ul class="pricing-features">
                 <li class="pricing-feature-item"><span class="pricing-check">✓</span><span>Tutto ciò che è nel pacchetto Plus</span></li>
@@ -2131,7 +2157,7 @@
             </span>
           </div>
           <p class="pensiero-zero-box__text">
-            Nessun abbonamento obbligatorio: il sito resta tuo. Per modifiche future puoi scegliere interventi singoli (<strong>25€–35€</strong>) oppure attivare <strong>Pensiero Zero</strong>, che include hosting veloce e sicurezza SSL, fino a 2 aggiornamenti al mese (testi, foto, orari, prezzi) e assistenza prioritaria su WhatsApp. Il dominio resta sempre intestato a te (a parte).
+            Nessun abbonamento obbligatorio: il sito resta tuo. Per modifiche future puoi scegliere interventi singoli (<strong>25€–35€</strong>) oppure attivare <strong>Pensiero Zero</strong>, che include hosting veloce e sicurezza SSL (altrimenti gestibili autonomamente), fino a 2 aggiornamenti al mese (testi, foto, orari, prezzi) e assistenza prioritaria su WhatsApp. Il dominio è sempre escluso e resta intestato a te.
           </p>
           <div class="pensiero-zero-box__pills">
             <span class="pensiero-zero-box__pill"><span class="pensiero-zero-box__pill-check" aria-hidden="true">✓</span><span>Hosting veloce e SSL</span></span>
@@ -2159,15 +2185,21 @@
       <div class="container">
         <div class="guarantees-strip__grid">
           <div class="guarantee-card reveal">
-            <span class="guarantee-card__icon" aria-hidden="true">✓</span>
+            <span class="guarantee-card__icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
             <span class="guarantee-card__text">Bozza e proposta gratuita prima di iniziare</span>
           </div>
           <div class="guarantee-card reveal">
-            <span class="guarantee-card__icon" aria-hidden="true">⚡</span>
+            <span class="guarantee-card__icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </span>
             <span class="guarantee-card__text">Consegna rapida in 5–10 giorni lavorativi</span>
           </div>
           <div class="guarantee-card reveal">
-            <span class="guarantee-card__icon" aria-hidden="true">💬</span>
+            <span class="guarantee-card__icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+            </span>
             <span class="guarantee-card__text">Assistenza diretta su WhatsApp con il team</span>
           </div>
         </div>
@@ -2306,7 +2338,7 @@
                         <span class="choice-card__title">Pacchetto Vetrina</span>
                         <span class="choice-card__price-row">
                           <span class="choice-card__price">299€</span>
-                          <span class="choice-card__billing">una tantum · dominio escluso</span>
+                          <span class="choice-card__billing">una tantum · dominio e hosting esclusi</span>
                         </span>
                         <span class="choice-card__desc">One-page veloce · Fino a 5 sezioni</span>
                         <span class="choice-card__features" role="list">
@@ -2315,7 +2347,7 @@
                           <span class="choice-card__feature-item" role="listitem"><span class="choice-card__check" aria-hidden="true">✓</span><span>Orari e informazioni</span></span>
                           <span class="choice-card__feature-item" role="listitem"><span class="choice-card__check" aria-hidden="true">✓</span><span>Pulsante WhatsApp diretto</span></span>
                           <span class="choice-card__feature-item" role="listitem"><span class="choice-card__check" aria-hidden="true">✓</span><span>Modulo contatti</span></span>
-                          <span class="choice-card__feature-item" role="listitem"><span class="choice-card__check" aria-hidden="true">✓</span><span>Pronto in 5–7 giorni lavorativi</span></span>
+                          <span class="choice-card__feature-item" role="listitem"><span class="choice-card__check" aria-hidden="true">✓</span><span>Pronto in 5–7 giorni lavorativi dalla consegna dei materiali</span></span>
                           <span class="choice-card__feature-item" role="listitem"><span class="choice-card__check" aria-hidden="true">✓</span><span>Fino a 5 sezioni</span></span>
                         </span>
                       </label>
@@ -2325,7 +2357,7 @@
                         <span class="choice-card__title">Pacchetto Plus</span>
                         <span class="choice-card__price-row">
                           <span class="choice-card__price">449€</span>
-                          <span class="choice-card__billing">una tantum · dominio escluso</span>
+                          <span class="choice-card__billing">una tantum · dominio e hosting esclusi</span>
                         </span>
                         <span class="choice-card__desc">Più funzioni e visibilità · Fino a 8 sezioni</span>
                         <span class="choice-card__features" role="list">
@@ -2341,7 +2373,7 @@
                         <span class="choice-card__title">Pacchetto Su Misura</span>
                         <span class="choice-card__price-row">
                           <span class="choice-card__price">da 690€</span>
-                          <span class="choice-card__billing">una tantum · in base a pagine e funzioni (dominio escluso)</span>
+                          <span class="choice-card__billing">una tantum · in base a pagine e funzioni · dominio e hosting esclusi</span>
                         </span>
                         <span class="choice-card__desc">Multipagina e gestionale · Fino a 12 sezioni</span>
                         <span class="choice-card__features" role="list">
@@ -2352,7 +2384,7 @@
                         </span>
                       </label>
                     </div>
-                    <p class="wizard-pkg-footnote">Nessun abbonamento obbligatorio: il sito resta tuo (dominio escluso e sempre intestato a te). Per modifiche future puoi scegliere interventi singoli (25€–35€) oppure attivare il piano opzionale Pensiero Zero a 15€/mese o 150€/anno (2 mesi gratis), che include hosting veloce e sicurezza SSL, fino a 2 aggiornamenti al mese e assistenza prioritaria su WhatsApp.</p>
+                    <p class="wizard-pkg-footnote">Nessun abbonamento obbligatorio: il sito resta tuo (dominio sempre escluso e intestato a te). Per hosting veloce + SSL e modifiche future puoi gestire tutto autonomamente, richiedere interventi singoli (25€–35€) oppure attivare il piano opzionale Pensiero Zero a 15€/mese o 150€/anno (2 mesi gratis), che include hosting veloce e sicurezza SSL, fino a 2 aggiornamenti al mese e assistenza prioritaria su WhatsApp.</p>
                   </div>
 
                   <!-- STEP 4: SEZIONI E FUNZIONALITÀ (SMART + LIMITE DINAMICO) -->
@@ -2790,7 +2822,7 @@
               aria-labelledby="faq-trigger-2"
             >
               <div class="faq-panel__inner">
-                <p class="faq-answer">Nessun costo a sorpresa e nessun abbonamento obbligatorio: il prezzo del pacchetto (Vetrina 299€, Plus 449€ o Su Misura da 690€) è una tantum e il sito resta tuo. Il dominio è sempre escluso e intestato direttamente a te. Per eventuali modifiche future puoi richiedere interventi singoli (25€–35€) oppure attivare il piano opzionale <strong>Pensiero Zero</strong> a <strong>15€/mese</strong> o <strong>150€/anno (2 mesi gratis)</strong>, che include hosting veloce e sicurezza SSL, fino a 2 aggiornamenti al mese (testi, foto, orari, prezzi) e assistenza prioritaria su WhatsApp.</p>
+                <p class="faq-answer">Nessun costo a sorpresa e nessun abbonamento obbligatorio: il prezzo del pacchetto (Vetrina 299€, Plus 449€ o Su Misura da 690€) è una tantum, con dominio e hosting esclusi, e il sito resta tuo. Il dominio è sempre intestato direttamente a te; l’hosting veloce con sicurezza SSL è gestibile autonomamente oppure incluso nel piano opzionale <strong>Pensiero Zero</strong> a <strong>15€/mese</strong> o <strong>150€/anno (2 mesi gratis)</strong>, che comprende anche fino a 2 aggiornamenti al mese (testi, foto, orari, prezzi) e assistenza prioritaria su WhatsApp. In alternativa, per singole modifiche sono disponibili interventi spot (25€–35€).</p>
               </div>
             </div>
           </div>
@@ -2822,7 +2854,10 @@
             <svg width="16" height="16" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16.004 3C8.832 3 3 8.832 3 16.004c0 2.293.6 4.53 1.74 6.501L3 29l6.68-1.752a12.94 12.94 0 0 0 6.324 1.656h.005C23.178 28.904 29 23.072 29 15.9 29 8.832 23.176 3 16.004 3zm7.59 18.42c-.32.9-1.87 1.72-2.59 1.83-.66.1-1.5.14-2.42-.15-.56-.18-1.28-.42-2.2-.82-3.87-1.67-6.4-5.58-6.6-5.84-.19-.26-1.58-2.1-1.58-4.01 0-1.91 1-2.85 1.35-3.24.35-.39.77-.49 1.03-.49.26 0 .52 0 .74.01.24.01.56-.09.87.67.32.77 1.09 2.66 1.19 2.85.1.19.16.42.03.68-.13.26-.19.42-.39.65-.19.23-.41.51-.58.68-.19.19-.39.4-.17.78.23.39 1.01 1.66 2.16 2.69 1.49 1.33 2.74 1.74 3.13 1.93.39.19.61.16.84-.1.23-.26.97-1.13 1.23-1.52.26-.39.52-.32.87-.19.35.13 2.26 1.07 2.65 1.26.39.19.65.29.74.45.1.16.1.94-.22 1.84z"/></svg>
             WhatsApp · +39 392 650 0185
           </a>
-          <a href="mailto:mgdstudio.web@proton.me" class="btn btn--primary btn--sm">✉️ Scrivici via Email</a>
+          <a href="mailto:mgdstudio.web@proton.me" class="btn btn--primary btn--sm">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            <span>Scrivici via Email</span>
+          </a>
           <button type="button" class="footer-link" data-open-modal="privacy-modal">Privacy Policy</button>
           <button type="button" class="footer-link" data-open-modal="cookie-modal">Cookie Policy</button>
         </div>
@@ -2868,6 +2903,7 @@
           <li><strong>Vercel</strong> — infrastruttura di hosting del sito web ed esecuzione dell’endpoint tecnico <code>/api/notify</code>;</li>
           <li><strong>Telegram</strong> — ricezione della notifica interna al team di MGD Studio per garantire una presa in carico rapida.</li>
         </ul>
+        <p>Alcuni dei fornitori tecnici sopra indicati possono trattare dati personali anche al di fuori dello Spazio Economico Europeo (SEE); in tali casi il trasferimento avviene nel rispetto degli <strong>artt. 44–49 del GDPR</strong>, sulla base di decisioni di adeguatezza della Commissione Europea o di Clausole Contrattuali Standard (SCC).</p>
 
         <h4>4. Periodo di conservazione</h4>
         <p>I dati raccolti tramite il configuratore sono conservati per il tempo necessario a evadere la richiesta e comunque per un periodo massimo di <strong>12 mesi</strong> dall’invio, salvo successiva instaurazione di un rapporto di collaborazione o obblighi di legge.</p>
@@ -2929,12 +2965,14 @@
           id: 'forno89',
           label: 'Pizzeria Forno 89',
           title: 'Anteprima interattiva dal vivo — Pizzeria Forno 89',
+          displayUrl: 'demo.mgdstudio.it/forno89',
           url: 'https://mgd-studio-web.github.io/pizzeria-forno89PROVA/'
         },
         {
           id: 'admin',
           label: 'Area Host (Admin)',
           title: 'Anteprima interattiva dal vivo — Area Host (Admin) Pizzeria Forno 89',
+          displayUrl: 'demo.mgdstudio.it/forno89/admin',
           url: 'https://mgd-studio-web.github.io/pizzeria-forno89PROVA/admin.html'
         }
       ],
@@ -3036,6 +3074,7 @@
     const showcaseStage = document.getElementById('showcase-iframe-stage');
     const showcaseIframe = document.getElementById('showcase-demo-iframe');
     const showcaseDomainUrl = document.getElementById('showcase-domain-url');
+    const showcaseDomainText = document.getElementById('showcase-domain-text');
     const showcaseOpenBtn = document.getElementById('showcase-open-btn');
     const showcaseOverlay = document.getElementById('showcase-interact-overlay');
     let showcaseLoaderTimer = null;
@@ -3116,8 +3155,10 @@
         tab.classList.add('is-active');
         tab.setAttribute('aria-selected', 'true');
         if (showcaseDomainUrl) {
-          showcaseDomainUrl.textContent = '🔒 ' + demo.url;
-          showcaseDomainUrl.title = demo.url;
+          const prettyUrl = demo.displayUrl || demo.url;
+          if (showcaseDomainText) showcaseDomainText.textContent = prettyUrl;
+          else showcaseDomainUrl.textContent = prettyUrl;
+          showcaseDomainUrl.title = prettyUrl;
         }
         if (showcaseOpenBtn) {
           showcaseOpenBtn.href = demo.url;
@@ -3881,7 +3922,7 @@
           label: 'Pacchetto',
           filled: pkgFilled,
           valueHtml: pkgFilled
-            ? `${escapeHtml(pkg.name)} · ${escapeHtml(pkg.price)}${packagePreselected && !packageConfirmed ? '<span class="sheet-pkg-badge">Preselezionato</span>' : ''}<span class="sheet-item__sub">${max !== null ? `Una tantum (dominio escluso) · Fino a ${max} sezioni` : 'Una tantum (dominio escluso) · Sezioni illimitate'}</span>`
+            ? `${escapeHtml(pkg.name)} · ${escapeHtml(pkg.price)}${packagePreselected && !packageConfirmed ? '<span class="sheet-pkg-badge">Preselezionato</span>' : ''}<span class="sheet-item__sub">${max !== null ? `Una tantum (dominio e hosting esclusi) · Fino a ${max} sezioni` : 'Una tantum (dominio e hosting esclusi) · Sezioni illimitate'}</span>`
             : '',
           placeholder: 'Da scegliere'
         },
