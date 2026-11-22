@@ -2,6 +2,12 @@ const RATE_LIMIT_MAX = 3;
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
 const rateLimitStore = new Map();
 
+const PACKAGE_LABELS = {
+  vetrina: 'PACCHETTO VETRINA (299€ una tantum)',
+  plus: 'PACCHETTO PLUS (449€ una tantum)',
+  completo: 'PACCHETTO SU MISURA (da 690€ una tantum)'
+};
+
 function getClientIp(req) {
   const xff = req.headers && (req.headers['x-forwarded-for'] || req.headers['X-Forwarded-For']);
   if (typeof xff === 'string' && xff.trim()) {
@@ -38,9 +44,42 @@ function checkRateLimit(ip) {
   return { allowed: true, retryAfterSec: 0 };
 }
 
+function readRawBody(req, maxBytes = 64 * 1024) {
+  return new Promise((resolve, reject) => {
+    if (!req || typeof req.on !== 'function' || req.readableEnded) {
+      return resolve('');
+    }
+    const chunks = [];
+    let total = 0;
+    req.on('data', chunk => {
+      const buf = Buffer.isBuffer(chunk) ? chunk : Buffer.from(String(chunk));
+      total += buf.length;
+      if (total > maxBytes) {
+        reject(new Error('Payload too large'));
+        if (typeof req.destroy === 'function') req.destroy();
+        return;
+      }
+      chunks.push(buf);
+    });
+    req.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
+    req.on('error', reject);
+  });
+}
+
+function truncateUnicode(str, maxChars) {
+  const chars = Array.from(String(str || ''));
+  if (chars.length <= maxChars) return chars.join('');
+  return chars.slice(0, Math.max(0, maxChars - 1)).join('') + '…';
+}
+
 module.exports = async function handler(req, res) {
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Allow', 'POST, OPTIONS');
+    return res.status(204).end();
+  }
+
   if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
+    res.setHeader('Allow', 'POST, OPTIONS');
     return res.status(405).json({ ok: false, error: 'Method Not Allowed' });
   }
 
@@ -48,7 +87,12 @@ module.exports = async function handler(req, res) {
   const limit = checkRateLimit(clientIp);
   if (!limit.allowed) {
     res.setHeader('Retry-After', String(limit.retryAfterSec));
-    return res.status(429).json({ ok: false, error: 'Too Many Requests' });
+    console.error('[api/notify] 429 Too Many Requests', { ip: clientIp, retryAfterSec: limit.retryAfterSec });
+    return res.status(429).json({
+      ok: false,
+      error: `Too Many Requests (riprova tra ${limit.retryAfterSec}s)`,
+      retryAfterSec: limit.retryAfterSec
+    });
   }
 
   let data;
@@ -56,15 +100,23 @@ module.exports = async function handler(req, res) {
     if (Buffer.isBuffer(req.body)) {
       data = JSON.parse(req.body.toString('utf8'));
     } else if (typeof req.body === 'string') {
-      data = JSON.parse(req.body);
-    } else {
+      data = req.body.trim() ? JSON.parse(req.body) : null;
+    } else if (req.body && typeof req.body === 'object') {
       data = req.body;
+    } else {
+      const raw = await readRawBody(req);
+      data = raw.trim() ? JSON.parse(raw) : null;
     }
-  } catch {
-    return res.status(400).json({ ok: false, error: 'Invalid JSON body' });
+  } catch (parseErr) {
+    const isTooLarge = parseErr && parseErr.message === 'Payload too large';
+    const status = isTooLarge ? 413 : 400;
+    const msg = isTooLarge ? 'Payload too large' : 'Invalid JSON body';
+    console.error(`[api/notify] ${status} ${msg}`, parseErr && parseErr.message);
+    return res.status(status).json({ ok: false, error: msg });
   }
 
   if (!data || typeof data !== 'object' || Array.isArray(data)) {
+    console.error('[api/notify] 400 Invalid JSON body (non-object payload)');
     return res.status(400).json({ ok: false, error: 'Invalid JSON body' });
   }
 
@@ -73,14 +125,7 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ ok: true });
   }
 
-  const botToken = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
-
-  if (!botToken || !chatId) {
-    return res.status(500).json({ ok: false, error: 'Missing Telegram env vars' });
-  }
-
-  const val = (v, fallback = 'Non indicato') => {
+  const val = (v, fallback = 'Non indicato', maxLen = 500) => {
     if (v === null || v === undefined) return fallback;
     if (Array.isArray(v)) {
       const joined = v
@@ -88,33 +133,64 @@ module.exports = async function handler(req, res) {
         .map(item => String(item).trim())
         .filter(Boolean)
         .join(', ');
-      return joined || fallback;
+      return joined ? truncateUnicode(joined, maxLen) : fallback;
     }
     if (typeof v === 'object') return fallback;
-    const s = String(v).trim();
-    return s || fallback;
+    const s = String(v).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '').trim();
+    return s ? truncateUnicode(s, maxLen) : fallback;
   };
 
-  const packageText = val(data.pkgLabel, '') || val(data.package);
-  const socialLink = val(data.social_or_site_link, '');
-  const wantsWhatsapp = val(data.wantsWhatsapp, '');
-  const wantsShowcase = val(data.wantsShowcase, '');
-  const referenceLinks = val(data.referenceLinks, '');
+  const businessName = val(data.businessName, '', 160);
+  const fullName = val(data.fullName, '', 160);
+  const email = val(data.email, '', 180);
+  const phone = val(data.phone, '', 40);
+
+  const missingFields = [];
+  if (!businessName) missingFields.push('businessName');
+  if (!fullName) missingFields.push('fullName');
+  if (!email && !phone) missingFields.push('email/phone');
+
+  if (missingFields.length > 0) {
+    const errMsg = `Missing required fields: ${missingFields.join(', ')}`;
+    console.error('[api/notify] 400', errMsg);
+    return res.status(400).json({ ok: false, error: errMsg, missingFields });
+  }
+
+  const botToken = (process.env.TELEGRAM_BOT_TOKEN || '').trim();
+  const chatId = (process.env.TELEGRAM_CHAT_ID || '').trim();
+
+  if (!botToken || !chatId) {
+    console.error('[api/notify] 500 Missing Telegram env vars', {
+      hasBotToken: Boolean(botToken),
+      hasChatId: Boolean(chatId)
+    });
+    return res.status(500).json({ ok: false, error: 'Missing Telegram env vars' });
+  }
+
+  const rawPkgId = val(data.package, '', 40).toLowerCase();
+  const packageText =
+    val(data.pkgLabel, '', 160) ||
+    PACKAGE_LABELS[rawPkgId] ||
+    val(data.package, 'Non indicato', 120);
+  const socialLink = val(data.social_or_site_link, '', 300);
+  const wantsWhatsapp = val(data.wantsWhatsapp, '', 80);
+  const wantsShowcase = val(data.wantsShowcase, '', 80);
+  const referenceLinks = val(data.referenceLinks, '', 300);
 
   const lines = [
     '📩 Nuova richiesta preventivo — MGD Studio',
     '',
-    `🏢 Attività: ${val(data.businessName)}`,
-    `🏷️ Tipo attività: ${val(data.businessType)}`,
-    `📍 Indirizzo: ${val(data.businessAddress)}`,
-    `👤 Cliente: ${val(data.fullName)}`,
-    `📞 Telefono: ${val(data.phone)}`,
-    `✉️ Email: ${val(data.email)}`,
+    `🏢 Attività: ${businessName}`,
+    `🏷️ Tipo attività: ${val(data.businessType, 'Non indicato', 120)}`,
+    `📍 Indirizzo: ${val(data.businessAddress, 'Non indicato', 200)}`,
+    `👤 Cliente: ${fullName}`,
+    `📞 Telefono: ${phone || 'Non indicato'}`,
+    `✉️ Email: ${email || 'Non indicato'}`,
     '',
     `📦 Pacchetto: ${packageText}`,
-    `🎨 Stile: ${val(data.style)}`,
-    `🌈 Colori: ${val(data.colors, 'Da concordare')}`,
-    `🧩 Sezioni: ${val(data.sections)}`
+    `🎨 Stile: ${val(data.style, 'Non indicato', 100)}`,
+    `🌈 Colori: ${val(data.colors, 'Da concordare', 200)}`,
+    `🧩 Sezioni: ${val(data.sections, 'Non indicato', 600)}`
   ];
 
   if (socialLink) lines.push(`🌐 Sito / Social / Maps: ${socialLink}`);
@@ -123,14 +199,14 @@ module.exports = async function handler(req, res) {
   if (referenceLinks && referenceLinks !== 'Nessuno') lines.push(`🔗 Siti di riferimento: ${referenceLinks}`);
 
   lines.push(
-    `⏱️ Tempistica: ${val(data.timeline)}`,
+    `⏱️ Tempistica: ${val(data.timeline, 'Non indicato', 100)}`,
     '',
-    `📝 Descrizione:\n${val(data.description)}`,
+    `📝 Descrizione:\n${val(data.description, 'Non indicata', 1200)}`,
     '',
-    `🗒️ Note:\n${val(data.additionalNotes, 'Nessuna')}`
+    `🗒️ Note:\n${val(data.additionalNotes, 'Nessuna', 500)}`
   );
 
-  const text = lines.join('\n').slice(0, 4096);
+  const text = truncateUnicode(lines.join('\n'), 4000);
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 8000);
@@ -147,27 +223,30 @@ module.exports = async function handler(req, res) {
     });
 
     let tgJson = null;
+    let tgRawText = '';
     try {
-      tgJson = await tgRes.json();
+      tgRawText = await tgRes.text();
+      tgJson = tgRawText ? JSON.parse(tgRawText) : null;
     } catch {
-      // Ignora errori di parsing su risposta non-JSON
+      // Risposta non-JSON
     }
 
     if (!tgRes.ok || (tgJson && tgJson.ok === false)) {
-      const tgError = (tgJson && tgJson.description) || `Telegram API error (${tgRes.status})`;
+      const tgError = (tgJson && tgJson.description) || tgRawText.slice(0, 200) || `Telegram API error (${tgRes.status})`;
       const status = tgRes.ok ? 502 : tgRes.status;
+      console.error('[api/notify] Telegram API error', { status, tgStatus: tgRes.status, tgError });
       return res.status(status).json({ ok: false, error: tgError });
     }
 
     return res.status(200).json({ ok: true });
   } catch (err) {
     if (err && err.name === 'AbortError') {
+      console.error('[api/notify] 504 Telegram request timed out');
       return res.status(504).json({ ok: false, error: 'Telegram request timed out' });
     }
-    return res.status(502).json({
-      ok: false,
-      error: err && err.message ? err.message : 'Telegram request failed'
-    });
+    const errMsg = err && err.message ? err.message : 'Telegram request failed';
+    console.error('[api/notify] 502 Telegram request failed:', errMsg);
+    return res.status(502).json({ ok: false, error: errMsg });
   } finally {
     clearTimeout(timeoutId);
   }

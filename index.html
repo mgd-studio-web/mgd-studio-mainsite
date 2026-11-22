@@ -2676,7 +2676,7 @@
         <h4>3. Destinatari e servizi terzi coinvolti</h4>
         <p>I tuoi dati non vengono venduti né diffusi per finalità di marketing di terzi. Per il funzionamento tecnico dell’invio della richiesta transitano tramite i seguenti fornitori tecnici:</p>
         <ul>
-          <li><strong>FormSubmit</strong> — inoltro via email della richiesta compilata e invio dell’email di conferma automatica;</li>
+          <li><strong>FormSubmit</strong> — inoltro via email della richiesta compilata;</li>
           <li><strong>Vercel</strong> — infrastruttura di hosting del sito web ed esecuzione dell’endpoint tecnico <code>/api/notify</code>;</li>
           <li><strong>Telegram</strong> — ricezione della notifica interna al team di MGD Studio per garantire una presa in carico rapida.</li>
         </ul>
@@ -4439,45 +4439,145 @@
       submitBtn.textContent = 'Invio in corso...';
       errorBanner.classList.remove('is-visible');
 
-      try {
-        const response = await fetch(`https://formsubmit.co/ajax/${siteConfig.contact.email}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            _subject: `Nuova Richiesta Sito Web: ${businessName} (${pkg ? pkg.shortName : pkgId})`,
-            _template: 'table',
-            _captcha: 'false',
-            _replyto: email,
-            _honey: honeyValue,
-            _autoresponse: 'Grazie per aver contattato MGD Studio! Abbiamo ricevuto la tua richiesta di preventivo e ti risponderemo entro 24 ore lavorative.',
-            '1. Nome Attività': businessName,
-            '2. Categoria Attività': businessType,
-            '3. Città / Indirizzo': businessAddress,
-            '4. Pacchetto Scelto': pkgLabel,
-            '5. Funzionalità e Sezioni': sections,
-            '6. Stile Desiderato': style,
-            '7. Colori Principali': colors,
-            '8. Tempistica Desiderata': timeline,
-            '9. Sito / Social / Maps': socialOrSiteLink || 'Non indicato',
-            '10. Descrizione Progetto': description,
-            '11. Note Aggiuntive': additionalNotes,
-            '12. Nome e Cognome': fullName,
-            '13. Telefono / WhatsApp': phone,
-            '14. Email Cliente': email
-          })
-        });
+      const notifyPayload = {
+        _honey: honeyValue,
+        fullName,
+        businessName,
+        businessType,
+        businessAddress,
+        email,
+        phone,
+        package: pkgId,
+        pkgLabel,
+        style,
+        colors,
+        sections,
+        social_or_site_link: socialOrSiteLink,
+        description,
+        timeline,
+        additionalNotes
+      };
 
-        let formSubmitResult = null;
+      const formSubmitPayload = {
+        _subject: `Nuova Richiesta Sito Web: ${businessName} (${pkg ? pkg.shortName : pkgId})`,
+        _template: 'table',
+        _captcha: 'false',
+        _replyto: email,
+        _honey: honeyValue,
+        name: fullName,
+        email: email,
+        '1. Nome Attività': businessName,
+        '2. Categoria Attività': businessType,
+        '3. Città / Indirizzo': businessAddress,
+        '4. Pacchetto Scelto': pkgLabel,
+        '5. Funzionalità e Sezioni': sections,
+        '6. Stile Desiderato': style,
+        '7. Colori Principali': colors,
+        '8. Tempistica Desiderata': timeline,
+        '9. Sito / Social / Maps': socialOrSiteLink || 'Non indicato',
+        '10. Descrizione Progetto': description,
+        '11. Note Aggiuntive': additionalNotes,
+        '12. Nome e Cognome': fullName,
+        '13. Telefono / WhatsApp': phone,
+        '14. Email Cliente': email
+      };
+
+      async function postJsonWithDiagnostics(url, payload, label, timeoutMs) {
+        const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        const timer = ctrl ? setTimeout(() => ctrl.abort(), timeoutMs) : null;
         try {
-          formSubmitResult = await response.json();
-        } catch {
-          // Alcune risposte potrebbero non avere body JSON
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            signal: ctrl ? ctrl.signal : undefined,
+            body: JSON.stringify(payload)
+          });
+
+          const rawText = await res.text().catch(() => '');
+          let json = null;
+          if (rawText) {
+            try {
+              json = JSON.parse(rawText);
+            } catch {
+              // Risposta non-JSON
+            }
+          }
+
+          const explicitFailure = Boolean(
+            json && (json.ok === false || json.success === false || json.success === 'false')
+          );
+
+          if (!res.ok || explicitFailure) {
+            const detail =
+              (json && (json.error || json.message)) ||
+              rawText.slice(0, 300) ||
+              res.statusText ||
+              'Risposta non valida';
+            console.error(`[MGD Studio] Errore ${label} (HTTP ${res.status}): ${detail}`, {
+              endpoint: url,
+              status: res.status,
+              statusText: res.statusText,
+              response: json || rawText
+            });
+            return { ok: false, status: res.status, detail };
+          }
+
+          return { ok: true, status: res.status, data: json };
+        } catch (fetchErr) {
+          const isTimeout = fetchErr && fetchErr.name === 'AbortError';
+          const detail = isTimeout
+            ? `Timeout dopo ${Math.round(timeoutMs / 1000)}s`
+            : (fetchErr && fetchErr.message ? fetchErr.message : 'Errore di rete');
+          console.error(`[MGD Studio] Errore di rete ${label}: ${detail}`, fetchErr);
+          return { ok: false, status: 0, detail };
+        } finally {
+          if (timer) clearTimeout(timer);
         }
-        if (!response.ok || (formSubmitResult && (formSubmitResult.success === false || formSubmitResult.success === 'false'))) {
-          throw new Error('Errore durante l’invio');
+      }
+
+      try {
+        const deliveryPromises = [
+          postJsonWithDiagnostics(
+            `https://formsubmit.co/ajax/${siteConfig.contact.email}`,
+            formSubmitPayload,
+            'FormSubmit',
+            12000
+          )
+        ];
+
+        if (siteConfig.notifications?.endpoint) {
+          deliveryPromises.push(
+            postJsonWithDiagnostics(
+              siteConfig.notifications.endpoint,
+              notifyPayload,
+              '/api/notify',
+              10000
+            )
+          );
+        }
+
+        const [formSubmitOutcome, notifyOutcome] = await Promise.all(deliveryPromises);
+        const anySucceeded = Boolean(
+          (formSubmitOutcome && formSubmitOutcome.ok) ||
+          (notifyOutcome && notifyOutcome.ok)
+        );
+
+        if (!anySucceeded) {
+          const rateLimited =
+            (notifyOutcome && notifyOutcome.status === 429) ||
+            (formSubmitOutcome && formSubmitOutcome.status === 429);
+          console.error('[MGD Studio] Invio preventivo fallito su tutti i canali:', {
+            formSubmit: formSubmitOutcome,
+            notify: notifyOutcome || null
+          });
+          errorBanner.textContent = rateLimited
+            ? 'Hai inviato troppe richieste ravvicinate. Attendi un minuto e riprova, oppure scrivici su WhatsApp.'
+            : 'Si è verificato un problema di connessione. Riprova tra qualche istante o scrivici a ' + siteConfig.contact.email;
+          errorBanner.classList.add('is-visible');
+          return;
         }
 
         window.va?.('event', {
@@ -4487,43 +4587,6 @@
             businessType: businessType
           }
         });
-
-        if (siteConfig.notifications?.endpoint) {
-          const notifyCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-          const notifyTimer = notifyCtrl ? setTimeout(() => notifyCtrl.abort(), 5000) : null;
-          try {
-            await fetch(siteConfig.notifications.endpoint, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-              },
-              signal: notifyCtrl ? notifyCtrl.signal : undefined,
-              body: JSON.stringify({
-                _honey: honeyValue,
-                fullName,
-                businessName,
-                businessType,
-                businessAddress,
-                email,
-                phone,
-                package: pkgId,
-                pkgLabel,
-                style,
-                colors,
-                sections,
-                social_or_site_link: socialOrSiteLink,
-                description,
-                timeline,
-                additionalNotes
-              })
-            });
-          } catch (notifyErr) {
-            // Notifica lato server non bloccante per la conferma utente
-          } finally {
-            if (notifyTimer) clearTimeout(notifyTimer);
-          }
-        }
 
         clearDraft();
         markSubmittedNow();
@@ -4540,6 +4603,7 @@
         if (configuratorLayout) configuratorLayout.style.display = 'none';
         confirmationScreen.classList.add('is-visible');
       } catch (err) {
+        console.error('[MGD Studio] Errore imprevisto durante l’invio del form:', err);
         errorBanner.textContent = 'Si è verificato un problema di connessione. Riprova tra qualche istante o scrivici a ' + siteConfig.contact.email;
         errorBanner.classList.add('is-visible');
       } finally {
